@@ -1,38 +1,378 @@
+/* App.css - Enhanced Styling */
+
+/* Main App Container */
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  min-height: 100vh;
+  background-color: var(--bg-body); /* Use variable from index.css */
 }
 
-.App-link {
-  color: #61dafb;
+/* Header Styling */
+.App-header {
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  padding: var(--spacing-lg) var(--spacing-md);
+  color: var(--color-white);
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--box-shadow-sm);
+  text-align: center; /* Center header content */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.App-header h1 {
+  margin: 0;
+  font-size: 2rem; /* Use relative unit */
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+}
+
+main {
+  flex-grow: 1; /* Ensure main content takes up available space */
+  padding: 0 var(--spacing-md) var(--spacing-xl);
+  width: 100%;
+  max-width: 1200px; /* Max width for the overall content area */
+  margin: 0 auto; /* Center the main content area */
+}
+
+/* General Page and Form Container Styles */
+.page-container,
+.form-container {
+  max-width: 750px; /* Increased max-width */
+  margin: var(--spacing-xl) auto;
+  padding: var(--spacing-xl);
+  background-color: var(--bg-content);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow);
+  text-align: left;
+}
+
+/* Specific container for card page to allow wider layout */
+.page-container.card-page-container {
+  max-width: 900px; 
+}
+
+
+.form-container h2, .page-container h2 {
+  text-align: center;
+  color: var(--text-heading);
+  margin-bottom: var(--spacing-lg);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.75rem; /* Adjusted heading size */
+}
+
+.form-container h3, .page-container h3 {
+  color: var(--text-heading);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  font-weight: var(--font-weight-medium);
+  font-size: 1.375rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-sm);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="password"],
+.form-group select {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  box-sizing: border-box;
+  transition: var(--transition-base);
+  background-color: var(--color-white); /* Ensure inputs are white */
+  color: var(--text-primary);
+}
+.form-group input::placeholder,
+.form-group select::placeholder {
+  color: var(--text-muted);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(var(--color-primary), 0.25); /* Use RGB for alpha */
+}
+
+.form-group input[readOnly] {
+  background-color: var(--bg-subtle);
+  cursor: default;
+}
+.form-group input[readOnly]:focus {
+  box-shadow: none;
+  border-color: var(--border-color);
+}
+
+
+/* Button Styling */
+button[type="submit"], .button-link {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: var(--transition-base);
+  text-decoration: none;
+  text-align: center;
+  box-shadow: var(--box-shadow-sm);
+  line-height: 1.5; /* Ensure text is centered vertically */
+}
+button[type="submit"]:hover, .button-link:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px); /* Enhanced hover effect */
+  box-shadow: var(--box-shadow);
+}
+button[type="submit"]:active, .button-link:active {
+  transform: translateY(0px);
+  box-shadow: var(--box-shadow-sm);
+}
+button[type="submit"]:disabled {
+  background-color: var(--color-secondary);
+  opacity: 0.65;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Secondary button style for "Back" or "Start Over" links */
+.button-link.secondary {
+  background-color: var(--color-secondary);
+}
+.button-link.secondary:hover {
+  background-color: var(--color-secondary-dark);
+}
+
+/* Message Styling (Loading, Error, Info) */
+.loading-message,
+.error-message,
+.info-message {
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  border-width: var(--border-width);
+  border-style: solid;
+}
+
+.loading-message {
+  background-color: rgba(90, 200, 250, 0.1); /* Light tint of --color-info */
+  border-color: var(--color-info);
+  color: var(--color-primary-dark); /* Or a darker shade of info, ensure contrast */
+}
+
+.error-message {
+  background-color: rgba(255, 59, 48, 0.1); /* Light tint of --color-danger */
+  border-color: var(--color-danger);
+  color: #A30000; /* Darker red for text, ensure contrast */
+  font-weight: var(--font-weight-medium);
+}
+
+.details-summary { /* Re-style as an info box */
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+}
+.details-summary p {
+  margin: var(--spacing-sm) 0;
+  line-height: var(--line-height-sm);
+}
+.details-summary p strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+
+/* API Response Viewer */
+.api-response-viewer {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background-color: var(--color-dark);
+  color: var(--color-light);
+  border: 1px solid var(--color-dark);
+  border-radius: var(--border-radius-lg);
+  overflow-x: auto;
+  box-shadow: var(--box-shadow-sm);
+}
+.api-response-viewer h3 {
+  color: var(--color-info);
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-secondary);
+  padding-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-medium);
+  font-size: 1.25rem;
+}
+.api-response-viewer pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: var(--font-family-monospace);
+  font-size: 0.875rem; /* Slightly smaller for density */
+  line-height: 1.6;
+  background-color: transparent; /* Inherit from parent */
+  border: none;
+  padding: 0;
+}
+
+/* Styles for the Rules Table (Page 2) */
+.rules-table-container {
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  overflow-x: auto;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-sm);
+  background-color: var(--bg-content);
+}
+.rules-table {
+  width: 100%;
+  border-collapse: collapse; /* Cleaner look */
+}
+.rules-table th,
+.rules-table td {
+  padding: var(--spacing-md);
+  text-align: left;
+  border-bottom: var(--border-width) solid var(--border-color);
+}
+.rules-table th {
+  background-color: var(--bg-subtle);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-heading);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.rules-table td {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+.rules-table tbody tr:last-child td {
+  border-bottom: none; /* Remove border from last row */
+}
+.rules-table tbody tr:hover {
+  background-color: var(--bg-subtle); 
+}
+.rules-table tbody tr.selected-rule {
+  background-color: rgba(0, 122, 255, 0.1); /* Light tint of --color-primary */
+  color: var(--color-primary-dark);
+}
+.rules-table tbody tr.selected-rule td {
+  color: var(--color-primary-dark);
+  font-weight: var(--font-weight-medium);
+}
+.rules-table td input[type="radio"] {
+  vertical-align: middle;
+  margin-right: var(--spacing-sm);
+  cursor: pointer;
+  transform: scale(1.1); /* Slightly larger radio */
+}
+
+/* Styles for CardSelectionPage two-panel layout (Page 3) */
+.card-entry-layout {
+  display: flex;
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+.card-form-panel,
+.card-selection-panel {
+  flex: 1;
+  padding: var(--spacing-lg);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--bg-content); /* Ensure consistent background */
+  box-shadow: var(--box-shadow-sm);
+}
+.card-selection-panel .form-group {
+  margin-bottom: var(--spacing-md);
+}
+.card-selection-panel p {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-top: var(--spacing-md);
+  line-height: var(--line-height-sm);
+}
+.card-selection-panel p strong {
+  color: var(--text-secondary);
+}
+
+/* Focus visible for accessibility - more prominent focus rings */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(var(--color-primary), 0.3);
+}
+/* For elements that already have a box-shadow on focus, like inputs */
+.form-group input:focus-visible,
+.form-group select:focus-visible {
+  outline: none; /* Use existing box-shadow */
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card-entry-layout {
+    flex-direction: column;
+    gap: var(--spacing-lg);
   }
-  to {
-    transform: rotate(360deg);
+  .page-container, .form-container {
+    max-width: 100%; /* Full width on mobile, padding handled by main */
+    margin-left: 0;
+    margin-right: 0;
+    padding: var(--spacing-lg);
+    border-radius: 0; /* Full width cards on mobile often look better without radius */
+    box-shadow: none; /* Or a very minimal one */
   }
+  .App-header {
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+  }
+  .App-header h1 {
+    font-size: 1.75rem;
+  }
+  .form-container h2, .page-container h2 {
+    font-size: 1.5rem;
+  }
+  .form-container h3, .page-container h3 {
+    font-size: 1.25rem;
+  }
+  button[type="submit"], .button-link {
+    width: 100%; /* Full width buttons on mobile */
+    margin-bottom: var(--spacing-sm); /* Space between stacked buttons */
+  }
+  .button-link + .button-link { /* If two links are next to each other */
+    margin-left: 0; 
+  }
+  div[style*="margin-top: 20px"] { /* Target the div holding back/start over links */
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Remove old card-option styles as they are replaced by dropdown */
+.card-selection-options, .card-option, .card-option:hover, .card-option.selected, .card-option input[type="radio"], .card-option label {
+  display: none !important; /* Effectively remove them */
 }

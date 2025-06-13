@@ -1,0 +1,131 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import '../App.css'; // Assuming some styles might be shared
+
+const InitialPaymentForm = () => {
+  const [apiKey, setApiKey] = useState('');
+  const [amount, setAmount] = useState('');
+  const [currency, setCurrency] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    if (!apiKey || !amount || !currency) {
+      setError('All fields are required.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Fetch routing ID
+      const routingResponse = await axios.get(
+        'https://integ.hyperswitch.io/api/routing/active?transaction_type=three_ds_authentication&limit=1',
+        {
+          headers: {
+            'api-key': apiKey,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        }
+      );
+
+      // Assuming the routing ID is in response.data[0].id or response.data[0].routing_rule_id
+      // This might need adjustment based on the actual API response structure.
+      // For now, let's try to find a field that looks like an ID.
+      let routingId = null;
+      if (routingResponse.data && routingResponse.data.length > 0) {
+        const rule = routingResponse.data[0];
+        // Common names for IDs in such objects
+        routingId = rule.id || rule.routing_id || rule.rule_id || rule.routing_rule_id; 
+      }
+
+      if (!routingId) {
+        setError('Could not retrieve a valid routing ID. Please check your API key and ensure active rules exist.');
+        setLoading(false);
+        return;
+      }
+
+      // Navigate to the card selection page with the necessary data
+      navigate('/select-card', {
+        state: {
+          apiKey,
+          routingId,
+          amount: parseFloat(amount), // Ensure amount is a number
+          currency,
+        },
+      });
+
+    } catch (err) {
+      console.error('Error during initial payment step:', err);
+      let errorMessage = 'Failed to process payment details.';
+      if (err.response) {
+        errorMessage += ` Server responded with ${err.response.status}.`;
+        if (err.response.data && err.response.data.message) {
+          errorMessage += ` Message: ${err.response.data.message}`;
+        }
+      } else if (err.request) {
+        errorMessage += ' No response received from server.';
+      } else {
+        errorMessage += ` Error: ${err.message}`;
+      }
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="form-container">
+      <h2>Step 1: Enter Payment Details</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="apiKey">API Key:</label>
+          <input
+            id="apiKey"
+            type="text"
+            placeholder="Your API Key"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="amount">Amount:</label>
+          <input
+            id="amount"
+            type="number"
+            placeholder="e.g., 10.50"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            required
+            step="0.01"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="currency">Currency:</label>
+          <input
+            id="currency"
+            type="text"
+            placeholder="e.g., USD, EUR, AMD"
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value.toUpperCase())}
+            required
+            maxLength="3"
+          />
+        </div>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Processing...' : 'Next: Select Card'}
+        </button>
+        {error && <p className="error-message">{error}</p>}
+      </form>
+    </div>
+  );
+};
+
+export default InitialPaymentForm;

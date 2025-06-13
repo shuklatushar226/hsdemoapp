@@ -1,23 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import ApiKeyEntryPage from './components/ApiKeyEntryPage';
+import PaymentDetailsPage from './components/PaymentDetailsPage';
+import CardSelectionPage from './components/CardSelectionPage';
+import './App.css'; // Import App.css
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Hyperswitch Payment Flow</h1>
       </header>
+      <main>
+        <Routes>
+          <Route path="/" element={<ApiKeyEntryPage />} />
+          <Route path="/payment-details" element={<PaymentDetailsPage />} />
+          <Route path="/select-card" element={<CardSelectionPage />} />
+        </Routes>
+      </main>
     </div>
   );
 }
