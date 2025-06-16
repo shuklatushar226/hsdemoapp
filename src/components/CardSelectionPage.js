@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css'; // Assuming some styles might be shared
+import showIcon from '../images/show.png';
+import hideIcon from '../images/hide.png';
 
 const cards = [
   { id: 'card1', name: 'Card 1', number: '4242 4242 4242 4242', expiry: '08/2027', cvv: '123', network: 'VISA', issuerName: 'Chase Bank', country: 'Poland' },
@@ -17,118 +19,400 @@ const getDeviceType = () => {
   // GamingConsole is hard to detect reliably in a browser environment
 };
 
-// Helper component to display API request and response in a formatted way
-const FormattedApiResponse = ({ requestData, responseData }) => {
+// Tooltip component for routing rule details
+const RoutingRuleTooltip = ({ routingId, rules, displayedRules, apiResponse, children }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  
+  console.log('RoutingRuleTooltip - routingId:', routingId);
+  console.log('RoutingRuleTooltip - rules:', rules);
+  console.log('RoutingRuleTooltip - displayedRules:', displayedRules);
+  
+  // Just display the first rule that is present
+  let selectedRule = null;
+  
+  if (displayedRules && displayedRules.length > 0) {
+    selectedRule = displayedRules[0]; // Just take the first rule
+  } else if (rules && rules.length > 0) {
+    selectedRule = rules[0]; // Fallback to first original rule
+  }
+  
+  console.log('RoutingRuleTooltip - selectedRule:', selectedRule);
+  
+  // Always show the tooltip container, even if no rule is found (for debugging)
+  return (
+    <div 
+      style={{ position: 'relative', display: 'inline-block' }}
+      onMouseEnter={() => {
+        console.log('Mouse entered tooltip area');
+        setShowTooltip(true);
+      }}
+      onMouseLeave={() => {
+        console.log('Mouse left tooltip area');
+        setShowTooltip(false);
+      }}
+    >
+      {children}
+      {showTooltip && (
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 1000,
+          backgroundColor: 'rgba(0, 0, 0, 0.75)',
+          color: 'white',
+          padding: '16px',
+          borderRadius: '12px',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          minWidth: '300px',
+          maxWidth: '400px',
+          maxHeight: '80vh',
+          fontSize: '0.85rem',
+          lineHeight: '1.4',
+          marginTop: '8px',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '-6px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '12px',
+            height: '12px',
+            backgroundColor: 'rgba(0, 0, 0, 0.95)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderBottom: 'none',
+            borderRight: 'none',
+            transform: 'translateX(-50%) rotate(45deg)'
+          }}></div>
+          
+          <div style={{ 
+            color: '#4FC3F7', 
+            fontWeight: '600', 
+            fontSize: '0.9rem',
+            marginBottom: '8px',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+            paddingBottom: '6px',
+            flexShrink: 0
+          }}>
+            🎯 Routing Rule Details
+          </div>
+          
+          <div style={{
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            flex: 1,
+            paddingRight: '4px'
+          }}>
+            {selectedRule ? (
+              <div style={{ display: 'grid', gap: '12px' }}>
+                {/* Rule Summary in Structured Format */}
+                <div style={{ 
+                  padding: '12px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                  borderRadius: '8px',
+                  borderLeft: '4px solid #4FC3F7'
+                }}>
+                  <div style={{ 
+                    color: '#4FC3F7', 
+                    fontSize: '0.75rem', 
+                    fontWeight: '600',
+                    marginBottom: '8px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}>
+                    Rule Summary
+                  </div>
+                  
+                  <div style={{ 
+                    fontFamily: 'Monaco, Consolas, monospace',
+                    fontSize: '0.8rem',
+                    lineHeight: '1.6',
+                    color: '#E8F5E8'
+                  }}>
+                    <div style={{ marginBottom: '4px' }}>
+                      <span style={{ color: '#FFE082', fontWeight: '600' }}>
+                        {selectedRule.id || selectedRule.routing_id || selectedRule.rule_id || selectedRule.decision_engine_routing_id}
+                      </span>
+                      <span style={{ color: '#B0BEC5', margin: '0 8px' }}>→</span>
+                      <span style={{ color: '#81C784', fontWeight: '600' }}>
+                        {selectedRule.name || selectedRule.profile_id || selectedRule.algorithm_for || 'Unnamed Rule'}
+                      </span>
+                    </div>
+                    
+                    {/* Rule Conditions */}
+                    {selectedRule.statements && selectedRule.statements.length > 0 && (
+                      <div style={{ color: '#E0E0E0', marginTop: '8px' }}>
+                        {selectedRule.statements.map((statement, index) => (
+                          <div key={index}>
+                            {statement.condition && statement.condition.map((cond, condIndex) => {
+                              const lhs = cond.lhs?.replace(/_/g, ' ') || 'unknown_field';
+                              const comparison = cond.comparison === 'Equal' ? '=' : cond.comparison;
+                              const value = typeof cond.value === 'object' && cond.value?.value 
+                                ? cond.value.value 
+                                : cond.value;
+                              
+                              return (
+                                <span key={condIndex}>
+                                  {condIndex > 0 && <span style={{ color: '#90CAF9' }}> AND </span>}
+                                  <span style={{ color: '#FFB74D' }}>{lhs}</span>
+                                  <span style={{ color: '#B0BEC5' }}> {comparison} </span>
+                                  <span style={{ color: '#A5D6A7' }}>{value}</span>
+                                </span>
+                              );
+                            })}
+                            {index < selectedRule.statements.length - 1 && (
+                              <div style={{ color: '#FF8A65', margin: '4px 0' }}>OR</div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Additional Details */}
+                <div style={{ display: 'grid', gap: '6px' }}>
+                  {selectedRule.kind && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#B0BEC5', fontWeight: '500' }}>Rule Type:</span>
+                      <span style={{ color: '#90CAF9', fontWeight: '600', textTransform: 'capitalize' }}>
+                        {selectedRule.kind}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Rule Type/Algorithm */}
+                {selectedRule.algorithm && (
+                  <div style={{ 
+                    marginTop: '8px',
+                    padding: '8px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    borderRadius: '6px',
+                    borderLeft: '3px solid #90CAF9'
+                  }}>
+                    <div style={{ color: '#B0BEC5', fontSize: '0.75rem', marginBottom: '4px' }}>
+                      Algorithm:
+                    </div>
+                    <div style={{ color: '#E0E0E0', fontSize: '0.8rem' }}>
+                      {selectedRule.algorithm}
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            ) : (
+              <div style={{ color: '#FF8A65', fontSize: '0.8rem' }}>
+                Debug: No rule found for ID "{routingId}"<br/>
+                Available rules: {rules?.length || 0}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Helper component to display API request and response in a clean, organized way
+const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules }) => {
+  const [activeTab, setActiveTab] = useState('response');
+
   if (!responseData && !requestData) return null;
 
-  // Using hex values from the new palette defined in index.css
-  const newPalette = {
-    primary: '#007AFF',
-    success: '#34C759',
-    textPrimary: '#1D1D1F',
-    textSecondary: '#6E6E73',
-    borderColor: '#D1D1D6',
-    borderColorDivider: '#E5E5EA',
-    fontFamilySansSerif: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
-    bgContent: '#FFFFFF',
-    boxShadowSm: '0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)',
+  const formatValue = (value) => {
+    if (typeof value === 'object' && value !== null) {
+      return JSON.stringify(value, null, 2);
+    }
+    return String(value);
   };
 
-  const renderSection = (title, data, titleColor = newPalette.primary, isCollapsibleSection = true) => {
+  const renderKeyValuePairs = (data, title, color) => {
     if (!data) return null;
 
-    const CollapsibleEntry = ({ entryKey, entryValue, level, isInitiallyExpanded = false, isCollapsibleEntry = true }) => {
-      const [isExpanded, setIsExpanded] = useState(isCollapsibleEntry ? (level === 0 ? true : isInitiallyExpanded) : true);
-      const isObjectOrArray = typeof entryValue === 'object' && entryValue !== null;
-
-      const toggleExpansion = () => {
-        if (isObjectOrArray && isCollapsibleEntry) {
-          setIsExpanded(!isExpanded);
-        }
-      };
-      
-      const renderNestedValue = (value, currentLevel) => {
-        if (typeof value === 'object' && value !== null) {
-          if (Array.isArray(value)) {
-            return (
-              <ul style={{ listStyleType: 'none', paddingLeft: '0', margin: '5px 0 5px 20px' }}>
-                {value.map((item, index) => (
-                   <li key={index} style={{ borderLeft: `2px solid ${newPalette.primary}`, paddingLeft: '10px', marginBottom: '5px' }}>
-                    <CollapsibleEntry entryKey={index} entryValue={item} level={currentLevel + 1} isCollapsibleEntry={isCollapsibleEntry} />
-                  </li>
-                ))}
-              </ul>
-            );
-          }
-          return (
-            <div style={{ borderLeft: `2px solid ${newPalette.borderColor}`, paddingLeft: '10px', marginLeft: '0px', marginTop:'5px' }}>
-              {Object.entries(value).map(([k, v]) => (
-                 <CollapsibleEntry key={k} entryKey={k} entryValue={v} level={currentLevel + 1} isCollapsibleEntry={isCollapsibleEntry} />
-              ))}
-            </div>
-          );
-        }
-        return <span style={{ color: newPalette.textSecondary, wordBreak: 'break-all', lineHeight: '1.6' }}>{String(value)}</span>;
-      };
-
-      const entryStyle = { marginBottom: '10px', paddingLeft: `${level * 15}px` };
-      const keyStyle = {
-        textTransform: 'capitalize',
-        color: level === 0 ? titleColor : newPalette.textPrimary,
-        fontWeight: level === 0 ? '700' : '600',
-        fontSize: level === 0 ? '1.0em' : '0.95em',
-        display: 'inline-block',
-        marginRight: '8px',
-      };
-      const valueContainerStyle = {
-        marginLeft: (isObjectOrArray && isCollapsibleEntry) ? '25px' : (isObjectOrArray && !isCollapsibleEntry ? '5px' : '0px'),
-        paddingTop: '3px',
-      };
-
-      return (
-        <div style={entryStyle}>
-          <div onClick={toggleExpansion} style={{ cursor: (isObjectOrArray && isCollapsibleEntry) ? 'pointer' : 'default', display: 'flex', alignItems: 'flex-start', padding: '3px 0' }}>
-            {isObjectOrArray && isCollapsibleEntry && (
-              <span style={{ marginRight: '8px', color: newPalette.primary, fontWeight: 'bold', width: '15px', display: 'inline-block', flexShrink: 0 }}>
-                {isExpanded ? '▼' : '►'}
-              </span>
-            )}
-            {isObjectOrArray && !isCollapsibleEntry && (<span style={{ marginRight: '8px', width: '15px', display: 'inline-block', flexShrink: 0 }}>&nbsp;</span>)}
-            <strong style={keyStyle}>{String(entryKey).replace(/_/g, ' ')}:</strong>
-            {!isObjectOrArray && <span style={{ color: newPalette.textSecondary, wordBreak: 'break-all', lineHeight: '1.6', marginLeft: '5px' }}>{String(entryValue)}</span>}
-          </div>
-          {isObjectOrArray && isExpanded && (<div style={valueContainerStyle}>{renderNestedValue(entryValue, level)}</div>)}
-        </div>
-      );
+    const importantFields = {
+      decision: 'Decision',
+      status: 'Status',
+      routing_id: 'Routing ID',
+      payment_id: 'Payment ID',
+      amount: 'Amount',
+      currency: 'Currency',
+      card_network: 'Card Network',
+      name: 'Issuer Name',
+      country: 'Country',
+      platform: 'Platform',
+      device_type: 'Device Type'
     };
 
+    const renderValue = (key, value) => {
+      if (typeof value === 'object' && value !== null) {
+        if (key === 'payment' && value.amount && value.currency) {
+          return `${value.amount} ${value.currency}`;
+        }
+        if (key === 'payment_method' && value.card_network) {
+          return value.card_network;
+        }
+        if (key === 'issuer' && value.name) {
+          return `${value.name}${value.country ? ` (${value.country})` : ''}`;
+        }
+        if (key === 'acquirer' && value.country) {
+          return value.country;
+        }
+        if (key === 'customer_device') {
+          return `${value.platform || 'Unknown'} - ${value.device_type || 'Unknown'}`;
+        }
+        if (key === 'three_ds') {
+          return value.authentication_status || 'N/A';
+        }
+        return 'Complex Object';
+      }
+      return String(value);
+    };
+
+    const getDisplayKey = (key) => importantFields[key] || key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
     return (
-      <div style={{ marginBottom: '25px', paddingBottom: '10px', borderBottom: `1px solid ${newPalette.borderColorDivider}` }}>
-        <h4 style={{ color: titleColor, borderBottom: `2px solid ${titleColor}`, paddingBottom: '8px', marginBottom: '15px', fontSize: '1.2em', fontWeight: '600' }}>
-          {title}
-        </h4>
-        {Object.entries(data).map(([key, value]) => (
-           <CollapsibleEntry key={key} entryKey={key} entryValue={value} level={0} isInitiallyExpanded={true} isCollapsibleEntry={isCollapsibleSection}/>
-        ))}
+      <div style={{ marginBottom: '24px' }}>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          marginBottom: '16px',
+          paddingBottom: '8px',
+          borderBottom: `2px solid ${color}`
+        }}>
+          <div style={{
+            width: '8px',
+            height: '8px',
+            borderRadius: '50%',
+            backgroundColor: color,
+            marginRight: '12px'
+          }}></div>
+          <h4 style={{ 
+            color: color, 
+            fontSize: '1.1rem', 
+            fontWeight: '600',
+            margin: 0
+          }}>
+            {title}
+          </h4>
+        </div>
+        
+        <div style={{ display: 'grid', gap: '12px' }}>
+          {Object.entries(data).map(([key, value]) => (
+            <div key={key} style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              padding: '12px 16px',
+              backgroundColor: '#f8f9fa',
+              borderRadius: '8px',
+              border: '1px solid #e9ecef'
+            }}>
+              <span style={{
+                fontWeight: '500',
+                color: '#495057',
+                fontSize: '0.9rem',
+                minWidth: '120px',
+                marginRight: '16px'
+              }}>
+                {getDisplayKey(key)}:
+              </span>
+              <span style={{
+                color: '#212529',
+                fontSize: '0.9rem',
+                textAlign: 'right',
+                wordBreak: 'break-word',
+                fontFamily: key.includes('id') || key === 'routing_id' ? 'Monaco, Consolas, monospace' : 'inherit'
+              }}>
+                {key === 'routing_id' ? (
+                  <RoutingRuleTooltip routingId={value} rules={rules} displayedRules={displayedRules} apiResponse={title === 'API Response' ? data : null}>
+                    <span style={{
+                      cursor: 'help',
+                      textDecoration: 'underline',
+                      textDecorationStyle: 'dotted',
+                      color: title === 'API Response' ? '#007AFF' : '#34C759'
+                    }}>
+                      {renderValue(key, value)}
+                    </span>
+                  </RoutingRuleTooltip>
+                ) : (
+                  renderValue(key, value)
+                )}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
 
   return (
     <div style={{ 
-      border: `1px solid ${newPalette.borderColor}`,
-      padding: '20px', 
-      borderRadius: '8px', 
-      backgroundColor: newPalette.bgContent,
-      marginTop: '15px', 
-      fontFamily: newPalette.fontFamilySansSerif,
-      boxShadow: newPalette.boxShadowSm,
-      width: '100%', 
-      boxSizing: 'border-box', 
-      overflowX: 'hidden' 
+      backgroundColor: 'rgba(255, 255, 255, 0.98)',
+      backdropFilter: 'blur(20px)',
+      borderRadius: '16px',
+      overflow: 'hidden',
+      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05)',
+      border: '1px solid rgba(255, 255, 255, 0.2)'
     }}>
-      {responseData && renderSection("Response Received", responseData, newPalette.primary, true)}
-      {requestData && renderSection("Request Sent", requestData, newPalette.success, false)}
+      {/* Tab Navigation */}
+      <div style={{ 
+        display: 'flex', 
+        borderBottom: '1px solid #e9ecef',
+        backgroundColor: '#f8f9fa'
+      }}>
+        {responseData && (
+          <button
+            onClick={() => setActiveTab('response')}
+            style={{
+              flex: 1,
+              padding: '16px',
+              border: 'none',
+              backgroundColor: activeTab === 'response' ? '#007AFF' : 'transparent',
+              color: activeTab === 'response' ? 'white' : '#6c757d',
+              fontWeight: '500',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            📊 Response
+          </button>
+        )}
+        {requestData && (
+          <button
+            onClick={() => setActiveTab('request')}
+            style={{
+              flex: 1,
+              padding: '16px',
+              border: 'none',
+              backgroundColor: activeTab === 'request' ? '#34C759' : 'transparent',
+              color: activeTab === 'request' ? 'white' : '#6c757d',
+              fontWeight: '500',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            📤 Request
+          </button>
+        )}
+      </div>
+
+      {/* Tab Content */}
+      <div style={{ padding: '24px' }}>
+        {activeTab === 'response' && responseData && 
+          renderKeyValuePairs(responseData, 'API Response', '#007AFF')
+        }
+        {activeTab === 'request' && requestData && 
+          renderKeyValuePairs(requestData, 'Request Payload', '#34C759')
+        }
+      </div>
     </div>
   );
 };
@@ -136,7 +420,7 @@ const FormattedApiResponse = ({ requestData, responseData }) => {
 
 const CardSelectionPage = () => {
   const location = useLocation();
-  const { apiKey, routingId, amount, currency } = location.state || {};
+  const { apiKey, routingId, amount, currency, rules, routingConfigData, displayedRules } = location.state || {};
 
   const [selectedCardId, setSelectedCardId] = useState('');
   const [cardNumber, setCardNumber] = useState('');
@@ -148,6 +432,55 @@ const CardSelectionPage = () => {
   const [error, setError] = useState('');
   const [apiResponse, setApiResponse] = useState(null);
   const [apiRequestPayload, setApiRequestPayload] = useState(null);
+  
+  // Validation states
+  const [validationErrors, setValidationErrors] = useState({
+    expiryDate: '',
+    cvv: ''
+  });
+
+  // Validation functions (card number validation removed)
+
+  const validateExpiryDate = (expiry) => {
+    if (!expiry) return 'Expiry date is required';
+    const expiryRegex = /^(0[1-9]|1[0-2])\/\d{4}$/;
+    if (!expiryRegex.test(expiry)) return 'Expiry must be in MM/YYYY format';
+    
+    const [month, year] = expiry.split('/');
+    const expiryDate = new Date(parseInt(year), parseInt(month) - 1);
+    const currentDate = new Date();
+    currentDate.setDate(1); // Set to first day of current month
+    
+    if (expiryDate < currentDate) return 'Card has expired';
+    return '';
+  };
+
+  const validateCVV = (cvv) => {
+    if (!cvv) return 'CVV is required';
+    if (!/^\d{3,4}$/.test(cvv)) return 'CVV must be 3-4 digits';
+    return '';
+  };
+
+  // Real-time validation handlers
+  const handleCardNumberChange = (e) => {
+    const value = e.target.value;
+    setCardNumber(value);
+    // No validation for card number
+  };
+
+  const handleExpiryDateChange = (e) => {
+    const value = e.target.value;
+    setExpiryDate(value);
+    const error = validateExpiryDate(value);
+    setValidationErrors(prev => ({ ...prev, expiryDate: error }));
+  };
+
+  const handleCVVChange = (e) => {
+    const value = e.target.value;
+    setCvv(value);
+    const error = validateCVV(value);
+    setValidationErrors(prev => ({ ...prev, cvv: error }));
+  };
 
   useEffect(() => {
     if (selectedCardId) {
@@ -221,6 +554,9 @@ const CardSelectionPage = () => {
       });
       setApiResponse(response.data);
       console.log('API Response:', JSON.stringify(response.data, null, 2));
+      
+      // Dispatch payment completed event to update progress bar
+      window.dispatchEvent(new CustomEvent('paymentCompleted'));
     } catch (err) {
       console.error('API Call Error:', err);
       let errorMessage = 'Failed to execute 3DS decision rule.';
@@ -243,111 +579,162 @@ const CardSelectionPage = () => {
   };
   
   return (
-    <div className="page-container form-container">
-      <h2>Step 3: Enter Card Details & Confirm</h2>
-      <div className="details-summary" style={{ marginBottom: '20px' }}>
-        <p><strong>Amount:</strong> {amount}</p>
-        <p><strong>Currency:</strong> {currency}</p>
-      </div>
+    <div className="page-container card-page-container">
+      <h2>Enter Card Details & Confirm</h2>
 
-      {/* Form and Controls Section */}
-      <div className="card-entry-layout">
-        {/* Card Input Form */}
-        <div className="card-form-panel">
-          <h3>Payment Details</h3>
-          <form onSubmit={handleSubmit} id="payment-form">
-            <div className="form-group">
-              <label htmlFor="cardNumber">Card Number:</label>
-              <input type="text" id="cardNumber" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} placeholder="---- ---- ---- ----" required />
+      {/* Main Side-by-Side Layout */}
+      <div className="card-page-main-layout">
+        {/* Left Side - Form Section */}
+        <div className="card-page-left-panel">
+          {/* Form and Controls Section */}
+          <div className="card-entry-layout">
+            {/* Card Input Form */}
+            <div className="card-form-panel">
+              <h3>Payment Details</h3>
+              <form onSubmit={handleSubmit} id="payment-form">
+                {/* Card Number Field */}
+                <div className="form-group modern-card-input">
+                  <div className="input-with-icon">
+                    <input 
+                      type="text" 
+                      id="cardNumber" 
+                      value={cardNumber} 
+                      onChange={handleCardNumberChange} 
+                      placeholder="Card Number" 
+                      required 
+                      className="card-number-input"
+                    />
+                    <div className="card-icon"></div>
+                  </div>
+                </div>
+                
+                {/* Expiry and CVV Row */}
+                <div className="form-row">
+                  <div className={`form-group form-group-half ${validationErrors.expiryDate ? 'validation-error' : ''}`}>
+                    <div className="input-with-icon">
+                      <input 
+                        type="text" 
+                        id="expiryDate" 
+                        value={expiryDate} 
+                        onChange={handleExpiryDateChange} 
+                        placeholder="Expiry" 
+                        required 
+                        className={`expiry-input ${validationErrors.expiryDate ? 'error' : ''}`}
+                        style={{
+                          borderColor: validationErrors.expiryDate ? '#DC2626' : '',
+                          color: validationErrors.expiryDate ? '#DC2626' : ''
+                        }}
+                      />
+                    </div>
+                    {validationErrors.expiryDate && (
+                      <div className="validation-error-message">
+                        {validationErrors.expiryDate}
+                      </div>
+                    )}
+                  </div>
+                  <div className={`form-group form-group-cvv ${validationErrors.cvv ? 'validation-error' : ''}`}>
+                    <div className="input-with-icon">
+                      <input
+                        type={isCvvVisible ? 'text' : 'password'}
+                        id="cvv"
+                        value={cvv}
+                        onChange={handleCVVChange}
+                        placeholder="CVC"
+                        required
+                        className={`cvv-input ${validationErrors.cvv ? 'error' : ''}`}
+                        style={{
+                          borderColor: validationErrors.cvv ? '#DC2626' : '',
+                          color: validationErrors.cvv ? '#DC2626' : ''
+                        }}
+                      />
+                      <div 
+                        className="cvv-toggle-icon"
+                        onClick={() => setIsCvvVisible(!isCvvVisible)}
+                        title={isCvvVisible ? 'Hide CVV' : 'Show CVV'}
+                      >
+                        <img 
+                          src={isCvvVisible ? hideIcon : showIcon}
+                          alt={isCvvVisible ? 'Hide CVV' : 'Show CVV'}
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            opacity: 0.7,
+                            transition: 'opacity 0.2s ease'
+                          }}
+                          onMouseEnter={(e) => e.target.style.opacity = '1'}
+                          onMouseLeave={(e) => e.target.style.opacity = '0.7'}
+                        />
+                      </div>
+                      <div className="cvv-icon"></div>
+                    </div>
+                    {validationErrors.cvv && (
+                      <div className="validation-error-message">
+                        {validationErrors.cvv}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </form>
             </div>
-            <div className="form-group">
-              <label htmlFor="expiryDate">Expiration Date (MM/YYYY):</label>
-              <input type="text" id="expiryDate" value={expiryDate} onChange={(e) => setExpiryDate(e.target.value)} placeholder="MM/YYYY" required />
-            </div>
-            <div className="form-group">
-              <label htmlFor="cvv">CVV:</label>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <input
-                  type={isCvvVisible ? 'text' : 'password'}
-                  id="cvv"
-                  value={cvv}
-                  onChange={(e) => setCvv(e.target.value)}
-                  placeholder="---"
-                  required
-                  style={{ flexGrow: 1, marginRight: '10px' }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setIsCvvVisible(!isCvvVisible)}
-                  className="button-link secondary" // Re-use button style, can be customized
-                  style={{ padding: 'var(--spacing-sm) var(--spacing-md)', minWidth: 'auto', lineHeight: '1.2' }}
-                >
-                  {isCvvVisible ? 'Hide' : 'Show'}
-                </button>
+            {/* Card Selection Dropdown */}
+            <div className="card-selection-panel">
+              <h3>Select a Predefined Card:</h3>
+              <div className="form-group">
+                <select id="cardSelector" value={selectedCardId} onChange={handleDropdownChange} style={{width: '100%', padding: '10px', fontSize: '1em'}} required>
+                  <option value="" disabled>-- Select a Card --</option>
+                  {cards.map(card => (
+                    <option key={card.id} value={card.id}>
+                      {card.name} ({card.issuerName}) - Ends in {card.number.slice(-4)}
+                    </option>
+                  ))}
+                </select>
               </div>
+              {selectedCardId ? (
+                <p style={{fontSize: '0.9em', color: '#555'}}>
+                  Selected Card Network: {cards.find(c => c.id === selectedCardId)?.network}<br/>
+                  Selected Issuer: {cards.find(c => c.id === selectedCardId)?.issuerName}
+                </p>
+              ) : (
+                <p style={{fontSize: '0.9em', color: '#777'}}>
+                  Select a card to see its details.
+                </p>
+              )}
             </div>
-          </form>
-        </div>
-        {/* Card Selection Dropdown */}
-        <div className="card-selection-panel">
-          <h3>Select a Predefined Card:</h3>
-          <div className="form-group">
-            <select id="cardSelector" value={selectedCardId} onChange={handleDropdownChange} style={{width: '100%', padding: '10px', fontSize: '1em'}} required>
-              <option value="" disabled>-- Select a Card --</option>
-              {cards.map(card => (
-                <option key={card.id} value={card.id}>
-                  {card.name} ({card.issuerName}) - Ends in {card.number.slice(-4)}
-                </option>
-              ))}
-            </select>
           </div>
-          {selectedCardId ? (
-            <p style={{fontSize: '0.9em', color: '#555'}}>
-              Selected Card Network: {cards.find(c => c.id === selectedCardId)?.network}<br/>
-              Selected Issuer: {cards.find(c => c.id === selectedCardId)?.issuerName}
-            </p>
+
+          {/* Powered by Hyperswitch */}
+          <div style={{ 
+            textAlign: 'center', 
+            marginTop: '16px', 
+            marginBottom: '8px',
+            fontSize: '0.85rem',
+            color: '#9CA3AF'
+          }}>
+            powered by <span style={{ fontWeight: '500', color: '#6B7280' }}>hyperswitch</span>
+          </div>
+
+          <button type="submit" form="payment-form" disabled={loading || !selectedCardId} style={{ marginTop: '8px', width: '100%' }}>
+            {loading ? 'Processing...' : `Pay ${amount} ${currency}`}
+          </button>
+          {error && <p className="error-message" style={{ marginTop: '15px' }}>{error}</p>}
+
+          
+        </div>
+
+        {/* Right Side - API Response Section */}
+        <div className="card-page-right-panel">
+          {(apiResponse || apiRequestPayload) ? (
+            <div className="api-response-container">
+              <h3 style={{ color: '#1D1D1F', marginBottom: '15px', fontSize: '1.3em', fontWeight: '600' }}>Transaction Details:</h3>
+              <FormattedApiResponse requestData={apiRequestPayload} responseData={apiResponse} rules={rules} displayedRules={displayedRules} />
+            </div>
           ) : (
-            <p style={{fontSize: '0.9em', color: '#777'}}>
-              Select a card to see its details.
-            </p>
+            <div className="api-response-placeholder">
+              <h3 style={{ color: '#6E6E73', marginBottom: '15px', fontSize: '1.3em', fontWeight: '600' }}>Transaction Details</h3>
+              <p style={{ color: '#8E8E93', fontStyle: 'italic' }}>Submit the form to see the API response here</p>
+            </div>
           )}
         </div>
-      </div>
-
-      <button type="submit" form="payment-form" disabled={loading || !selectedCardId} style={{ marginTop: '20px', width: '100%' }}>
-        {loading ? 'Processing...' : 'Submit Payment'}
-      </button>
-      {error && <p className="error-message" style={{ marginTop: '15px' }}>{error}</p>}
-
-      {/* API Response Section - now below the form */}
-      {(apiResponse || apiRequestPayload) && (
-        // This div uses class .api-response-viewer from App.css for some base styles if needed,
-        // but critical layout/theme aspects are controlled by FormattedApiResponse internal styles
-        // or overridden here if necessary.
-        // The new palette uses --bg-content for background and --border-color for border.
-        // Spacing variables like --spacing-lg can be used for padding.
-        <div 
-          className="api-response-viewer" // Keep class for potential App.css overrides
-          style={{ 
-            marginTop: '20px', // var(--spacing-xl)
-            maxHeight: '350px', 
-            overflowY: 'auto', 
-            // Styles below will be largely dictated by FormattedApiResponse now,
-            // but we can set a container background and border matching the theme.
-            // background: '#fdfdfd', // Will be newPalette.bgContent via FormattedApiResponse
-            // border: '1px solid #e0e0e0', // Will be newPalette.borderColor via FormattedApiResponse
-            // padding: '15px', // var(--spacing-lg) - FormattedApiResponse has its own padding
-            // borderRadius: '8px', // var(--border-radius-lg) - FormattedApiResponse has its own
-          }}
-        >
-          <h3 style={{ color: '#1D1D1F', marginBottom: '15px', fontSize: '1.3em', fontWeight: '600' }}>Transaction Details:</h3>
-          <FormattedApiResponse requestData={apiRequestPayload} responseData={apiResponse} />
-        </div>
-      )}
-
-      <div style={{marginTop: '30px', paddingTop: '20px', borderTop: '1px solid #E5E5EA', boxSizing: 'border-box'}}>
-        <Link to="/payment-details" state={{apiKey, rules: location.state?.rules || [] }} className="button-link secondary" style={{marginRight: '10px'}}>Back to Payment Details</Link>
-        <Link to="/" className="button-link secondary">Start Over (API Key)</Link>
       </div>
     </div>
   );

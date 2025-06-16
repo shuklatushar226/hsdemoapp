@@ -81,7 +81,7 @@ const ApiKeyEntryPage = () => {
 
   return (
     <div className="form-container">
-      <h2>Step 1: Enter API Key</h2>
+      <h2>Enter API Key</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="apiKey">API Key:</label>
@@ -94,8 +94,19 @@ const ApiKeyEntryPage = () => {
             required
           />
         </div>
+        {/* Powered by Hyperswitch */}
+          <div style={{ 
+            textAlign: 'center', 
+            marginTop: '16px', 
+            marginBottom: '8px',
+            fontSize: '0.85rem',
+            color: '#9CA3AF'
+          }}>
+            powered by <span style={{ fontWeight: '500', color: '#6B7280' }}>hyperswitch</span>
+          </div>
+
         <button type="submit" disabled={loading}>
-          {loading ? 'Fetching Rules...' : 'Next: Enter Payment Details'}
+          {loading ? 'Fetching Rules...' : 'Enter Payment Details'}
         </button>
         {error && <p className="error-message" style={{marginTop: '15px'}}>{error}</p>}
       </form>

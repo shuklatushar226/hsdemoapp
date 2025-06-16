@@ -1,41 +1,62 @@
-/* CSS Custom Properties (Variables) */
+/* Import Professional Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* CSS Custom Properties (Variables) - Professional Design System */
 :root {
-  /* New Color Palette */
-  --color-primary: #007AFF; /* Primary Blue */
-  --color-primary-dark: #0059B3; /* Darker Primary Blue */
-  --color-secondary: #8E8E93; /* Secondary Gray - for less important elements */
-  --color-secondary-dark: #6E6E73; /* Darker Secondary Gray */
-  --color-success: #34C759; /* Success Green */
-  --color-danger: #FF3B30; /* Error Red */
-  --color-warning: #FF9500; /* Warning Orange */
-  --color-info: #5AC8FA; /* Info Blue */
+  /* Professional Color Palette */
+  --color-primary: #2563EB; /* Professional Blue */
+  --color-primary-light: #3B82F6;
+  --color-primary-dark: #1D4ED8;
+  --color-primary-darker: #1E40AF;
   
-  --color-light: #F5F5F7; /* Page Background / Very Light Gray */
-  --color-dark: #1D1D1F;  /* Main Text Color */
-  --color-white: #ffffff;
+  --color-secondary: #64748B; /* Professional Gray */
+  --color-secondary-light: #94A3B8;
+  --color-secondary-dark: #475569;
+  
+  --color-accent: #7C3AED; /* Professional Purple */
+  --color-accent-light: #8B5CF6;
+  
+  --color-success: #059669; /* Professional Green */
+  --color-success-light: #10B981;
+  --color-danger: #DC2626; /* Professional Red */
+  --color-warning: #D97706; /* Professional Orange */
+  --color-info: #0891B2; /* Professional Cyan */
+  
+  --color-light: #F8FAFC; /* Premium Background */
+  --color-lighter: #F1F5F9;
+  --color-dark: #0F172A;  /* Rich Dark */
+  --color-white: #FFFFFF;
   --color-black: #000000;
 
-  --text-primary: var(--color-dark); /* Main text */
-  --text-secondary: #6E6E73;       /* Secondary/Subtle text */
-  --text-muted: #8E8E93;           /* Muted text, often for placeholders or disabled */
-  --text-heading: var(--color-dark); /* Headings text color */
+  /* Text Colors */
+  --text-primary: var(--color-dark);
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --text-light: #94A3B8;
+  --text-heading: var(--color-dark);
   --text-link: var(--color-primary);
   --text-link-hover: var(--color-primary-dark);
 
-  --bg-body: var(--color-light);              /* Page background */
-  --bg-content: var(--color-white);           /* Component/Card background */
-  --bg-subtle: #E5E5EA;                /* Subtle background, e.g., for disabled or hover states */
+  /* Background Colors */
+  --bg-body: var(--color-light);
+  --bg-content: var(--color-white);
+  --bg-subtle: #F1F5F9;
+  --bg-muted: #E2E8F0;
   --bg-input: var(--color-white);
+  --bg-glass: rgba(255, 255, 255, 0.8);
 
-  --border-color: #D1D1D6;             /* Subtle Borders */
-  --border-color-input: #C6C6C8;       /* Input Borders */
-  --border-color-divider: #E5E5EA;     /* Dividers */
+  /* Border Colors */
+  --border-color: #E2E8F0;
+  --border-color-light: #F1F5F9;
+  --border-color-input: #D1D5DB;
+  --border-color-divider: #E5E7EB;
+  --border-color-focus: var(--color-primary);
 
   /* Typography */
-  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
+  --font-family-sans-serif: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-family-monospace: 'JetBrains Mono', 'Fira Code', 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
 
   --font-size-base: 1rem; /* Typically 16px */

@@ -144,12 +144,18 @@ const PaymentDetailsPage = () => {
         return;
     }
 
+    // Get the specific rules displayed in the table
+    const displayedRules = routingConfigData?.algorithm?.data?.rules || [];
+    
     navigate('/select-card', {
       state: {
         apiKey,
         routingId: selectedRuleId,
         amount: numericAmount, // Send integer amount
         currency,
+        rules: rules, // Pass the original rules array
+        routingConfigData: routingConfigData, // Pass the routing configuration data
+        displayedRules: displayedRules, // Pass the specific rules shown in the table
       },
     });
   };
@@ -158,7 +164,7 @@ const PaymentDetailsPage = () => {
 
   return (
     <div className="page-container form-container">
-      <h2>Step 2: Enter Payment Details</h2>
+      <h2>Enter Payment Details</h2>
 
       {/* Display Selected Routing Configuration */}
       {selectedRuleId && (
@@ -262,15 +268,24 @@ const PaymentDetailsPage = () => {
             <option value="INR">INR - Indian Rupee</option>
             <option value="AUD">AUD - Australian Dollar</option>
             <option value="CAD">CAD - Canadian Dollar</option>
+            <option value="ANG">ANG - Netherlands Antillean Guilder</option>
             {/* Add more currencies as needed */}
           </select>
         </div>
+        <div style={{ 
+            textAlign: 'center', 
+            marginTop: '16px', 
+            marginBottom: '8px',
+            fontSize: '0.85rem',
+            color: '#9CA3AF'
+          }}>
+            powered by <span style={{ fontWeight: '500', color: '#6B7280' }}>hyperswitch</span>
+          </div>
         <button type="submit" disabled={!selectedRuleId}>
-          Next: Select Card
+          Select Card
         </button>
         {error && <p className="error-message" style={{marginTop: '15px'}}>{error}</p>}
       </form>
-      <Link to="/" className="button-link secondary" style={{display: 'inline-block', marginTop: '20px', marginRight: '10px'}}>Back to API Key</Link>
     </div>
   );
 };
