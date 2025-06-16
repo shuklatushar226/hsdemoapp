@@ -99,7 +99,7 @@ const RoutingRuleTooltip = ({ routingId, rules, displayedRules, apiResponse, chi
             paddingBottom: '6px',
             flexShrink: 0
           }}>
-            🎯 Routing Rule Details
+             Routing Rule Details
           </div>
           
           <div style={{
