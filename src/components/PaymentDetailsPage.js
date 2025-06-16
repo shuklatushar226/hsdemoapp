@@ -160,132 +160,172 @@ const PaymentDetailsPage = () => {
     });
   };
 
-  // const getRuleId = (rule) => rule.id || rule.routing_id || rule.rule_id || rule.routing_rule_id || 'N/A'; // Commented out as it's unused
-
   return (
-    <div className="page-container form-container">
-      <h2>Enter Payment Details</h2>
+    <div className="page-container payment-details-container">
+      <h2>Config 3DS Rules</h2>
 
-      {/* Display Selected Routing Configuration */}
-      {selectedRuleId && (
-        <div style={{ marginBottom: 'var(--spacing-xl)' }}>
-          {/* Heading removed as per request */}
-          {routingConfigLoading && <p className="loading-message">Loading configuration...</p>}
-          {routingConfigError && <p className="error-message">{routingConfigError}</p>}
-          
-          {(() => {
-            // Path: routingConfigData.algorithm.data.rules
-            const algorithmData = routingConfigData?.algorithm?.data;
-            if (algorithmData && Array.isArray(algorithmData.rules) && algorithmData.rules.length > 0) {
-              const rulesToDisplay = algorithmData.rules;
-              
-              return (
-                <div className="rules-table-container">
-                  <table className="rules-table">
-                    <thead>
-                      <tr>
-                        <th style={{width: '25%'}}>Rule Name</th>
-                        <th style={{width: '25%'}}>Connector Selection Decision</th>
-                        <th style={{width: '50%'}}>Conditions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rulesToDisplay.map((rule, index) => (
-                        <tr key={index}>
-                          <td>{rule.name || rule.rule_name || rule.id || rule.rule_id || 'N/A'}</td>
-                          <td>
-                            {rule.connectorSelection && rule.connectorSelection.decision !== undefined
-                              ? String(rule.connectorSelection.decision)
-                              : 'N/A'}
-                          </td>
-                          <td>
-                            <ConditionDisplay statementsData={rule.statements} />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              );
-            } else if (routingConfigData && !routingConfigLoading) {
-              // Check if algorithm or data or rules is missing or not the correct type
-              let message = "No specific rules found within the algorithm data of this routing configuration.";
-              if (!routingConfigData.algorithm) {
-                message = "Algorithm details not found in the routing configuration.";
-              } else if (!routingConfigData.algorithm.data) {
-                message = "Algorithm 'data' property not found in the routing configuration.";
-              } else if (!Array.isArray(routingConfigData.algorithm.data.rules)) {
-                message = "The 'rules' property within algorithm data is not an array as expected.";
-              } else if (routingConfigData.algorithm.data.rules.length === 0) {
-                message = "The 'rules' array within algorithm data is empty.";
-              }
-              return <p className="info-message">{message}</p>;
-            }
-            return null;
-          })()}
-        </div>
-      )}
-      
-      {/* Available Routing Rules section removed as per request */}
-
-      <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
-        <div className="form-group">
-          <label htmlFor="amount">Amount:</label>
-          <input
-            id="amount"
-            type="number"
-            placeholder="e.g., 100"
-            value={amount}
-            onChange={(e) => {
-              const val = e.target.value;
-              // Allow empty string for clearing input, otherwise try to parse as int
-              if (val === '' || /^[1-9]\d*$/.test(val)) {
-                setAmount(val);
-              } else if (val === '0' && amount === '') { // Allow typing '0' initially if field is empty, but it won't be valid alone
-                setAmount(val); 
-              } else if (val === '' && amount !== '') { // Handle backspace to empty
-                setAmount('');
-              }
-            }}
-            required
-            min="1" // HTML5 validation for positive
-            step="1"  // HTML5 validation for integer
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="currency">Currency:</label>
-          <select
-            id="currency"
-            value={currency}
-            onChange={(e) => setCurrency(e.target.value)}
-            required
-          >
-            <option value="" disabled>Select Currency</option>
-            <option value="USD">USD - US Dollar</option>
-            <option value="EUR">EUR - Euro</option>
-            <option value="GBP">GBP - British Pound</option>
-            <option value="JPY">JPY - Japanese Yen</option>
-            <option value="INR">INR - Indian Rupee</option>
-            <option value="AUD">AUD - Australian Dollar</option>
-            <option value="CAD">CAD - Canadian Dollar</option>
-            <option value="ANG">ANG - Netherlands Antillean Guilder</option>
-            {/* Add more currencies as needed */}
-          </select>
-        </div>
-        <div style={{ 
-            textAlign: 'center', 
-            marginTop: '16px', 
-            marginBottom: '8px',
-            fontSize: '0.85rem',
-            color: '#9CA3AF'
-          }}>
-            powered by <span style={{ fontWeight: '500', color: '#6B7280' }}>hyperswitch</span>
+      {/* Side-by-side layout */}
+      <div className="payment-details-layout">
+        {/* Left Side - Form */}
+        <div className="payment-form-panel">
+          <div className="panel-header">
+            <h3>Payment Information</h3>
           </div>
-        <button type="submit" disabled={!selectedRuleId}>
-          Select Card
-        </button>
-        {error && <p className="error-message" style={{marginTop: '15px'}}>{error}</p>}
-      </form>
+          
+          <form onSubmit={handleSubmit} className="payment-form">
+            <div className="form-group">
+              <label htmlFor="amount">
+                Amount
+              </label>
+              <div className="input-wrapper">
+                <input
+                  id="amount"
+                  type="number"
+                  placeholder="e.g., 100"
+                  value={amount}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    // Allow empty string for clearing input, otherwise try to parse as int
+                    if (val === '' || /^[1-9]\d*$/.test(val)) {
+                      setAmount(val);
+                    } else if (val === '0' && amount === '') { // Allow typing '0' initially if field is empty, but it won't be valid alone
+                      setAmount(val); 
+                    } else if (val === '' && amount !== '') { // Handle backspace to empty
+                      setAmount('');
+                    }
+                  }}
+                  required
+                  min="1" // HTML5 validation for positive
+                  step="1"  // HTML5 validation for integer
+                  className="amount-input"
+                />
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="currency">
+                Currency
+              </label>
+              <div className="select-wrapper">
+                <select
+                  id="currency"
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  required
+                  className="currency-select"
+                >
+                  <option value="" disabled>Select Currency</option>
+                  <option value="USD">USD - US Dollar</option>
+                  <option value="EUR">EUR - Euro</option>
+                  <option value="GBP">GBP - British Pound</option>
+                  <option value="JPY">JPY - Japanese Yen</option>
+                  <option value="INR">INR - Indian Rupee</option>
+                  <option value="AUD">AUD - Australian Dollar</option>
+                  <option value="CAD">CAD - Canadian Dollar</option>
+                  <option value="ANG">ANG - Netherlands Antillean Guilder</option>
+                </select>
+                <div className="select-arrow">▼</div>
+              </div>
+            </div>
+            
+            <div className="form-footer">
+              <div className="powered-by">
+                powered by <span className="brand">hyperswitch</span>
+              </div>
+              <button type="submit" disabled={!selectedRuleId} className="submit-button">
+                Select Card
+              </button>
+              {error && <div className="error-message">{error}</div>}
+            </div>
+          </form>
+        </div>
+
+        {/* Right Side - Rules Table */}
+        <div className="routing-config-panel">
+          <div className="panel-header">
+            <h3>Routing Configuration</h3>
+          </div>
+          
+          <div className="config-content">
+            {selectedRuleId && (
+              <div>
+                {routingConfigLoading && (
+                  <div className="loading-state">
+                    <div className="loading-spinner"></div>
+                    <p className="loading-message">Loading configuration...</p>
+                  </div>
+                )}
+                {routingConfigError && <div className="error-message">{routingConfigError}</div>}
+                
+                {(() => {
+                  // Path: routingConfigData.algorithm.data.rules
+                  const algorithmData = routingConfigData?.algorithm?.data;
+                  if (algorithmData && Array.isArray(algorithmData.rules) && algorithmData.rules.length > 0) {
+                    const rulesToDisplay = algorithmData.rules;
+                    
+                    return (
+                      <div className="rules-table-container">
+                        <div className="table-wrapper">
+                          <table className="rules-table">
+                            <thead>
+                              <tr>
+                                <th>Rule Name</th>
+                                <th>Decision</th>
+                                <th>Conditions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {rulesToDisplay.map((rule, index) => (
+                                <tr key={index} className="rule-row">
+                                  <td className="rule-name">
+                                    <div className="rule-name-content">
+                                      {rule.name || rule.rule_name || rule.id || rule.rule_id || 'N/A'}
+                                    </div>
+                                  </td>
+                                  <td className="rule-decision">
+                                    <span className="decision-badge">
+                                      {rule.connectorSelection && rule.connectorSelection.decision !== undefined
+                                        ? String(rule.connectorSelection.decision)
+                                        : 'N/A'}
+                                    </span>
+                                  </td>
+                                  <td className="rule-conditions">
+                                    <ConditionDisplay statementsData={rule.statements} />
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    );
+                  } else if (routingConfigData && !routingConfigLoading) {
+                    // Check if algorithm or data or rules is missing or not the correct type
+                    let message = "No specific rules found within the algorithm data of this routing configuration.";
+                    if (!routingConfigData.algorithm) {
+                      message = "Algorithm details not found in the routing configuration.";
+                    } else if (!routingConfigData.algorithm.data) {
+                      message = "Algorithm 'data' property not found in the routing configuration.";
+                    } else if (!Array.isArray(routingConfigData.algorithm.data.rules)) {
+                      message = "The 'rules' property within algorithm data is not an array as expected.";
+                    } else if (routingConfigData.algorithm.data.rules.length === 0) {
+                      message = "The 'rules' array within algorithm data is empty.";
+                    }
+                    return <div className="info-message">{message}</div>;
+                  }
+                  return (
+                    <div className="empty-state">
+                      <div className="empty-icon"></div>
+                      <p>Routing configuration will appear here</p>
+                      <small>Rules are automatically loaded when available</small>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

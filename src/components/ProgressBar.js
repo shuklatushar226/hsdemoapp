@@ -54,7 +54,8 @@ const ProgressBar = ({ currentStep, totalSteps, steps }) => {
                 )}
               </div>
               <span className={`progress-step-label-horizontal ${
-                index + 1 <= currentStep ? 'completed' : 'pending'
+                index + 1 < currentStep ? 'completed' : 
+                index + 1 === currentStep ? 'active' : 'pending'
               }`}>
                 {step}
               </span>

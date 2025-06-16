@@ -6,9 +6,9 @@ import showIcon from '../images/show.png';
 import hideIcon from '../images/hide.png';
 
 const cards = [
-  { id: 'card1', name: 'Card 1', number: '4242 4242 4242 4242', expiry: '08/2027', cvv: '123', network: 'VISA', issuerName: 'Chase Bank', country: 'Poland' },
-  { id: 'card2', name: 'Card 2', number: '4000 4000 4000 4000', expiry: '11/2026', cvv: '456', network: 'VISA', issuerName: 'Bank of America', country: 'India' },
-  { id: 'card3', name: 'Card 3', number: '4111 1111 1111 1111', expiry: '03/2028', cvv: '789', network: 'VISA', issuerName: 'Citi Bank', country: 'Germany' },
+  { id: 'card1', name: 'Chase Sapphire Preferred', number: '4242 4242 4242 4242', expiry: '08/2027', cvv: '123', network: 'VISA', issuerName: 'Chase Bank', country: 'Poland' },
+  { id: 'card2', name: 'Bank of America Cash Rewards', number: '4000 4000 4000 4000', expiry: '11/2026', cvv: '456', network: 'VISA', issuerName: 'Bank of America', country: 'India' },
+  { id: 'card3', name: 'Citi Double Cash Card', number: '4111 1111 1111 1111', expiry: '03/2028', cvv: '789', network: 'VISA', issuerName: 'Citi Bank', country: 'Germany' },
 ];
 
 const getDeviceType = () => {
@@ -270,6 +270,28 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
 
     const getDisplayKey = (key) => importantFields[key] || key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
+    const getDecisionColor = (decision) => {
+      switch(decision?.toLowerCase()) {
+        case 'challenge_requested': return '#FF6B35';
+        case 'frictionless': return '#10B981';
+        case 'not_supported': return '#6B7280';
+        case 'authentication_failed': return '#DC2626';
+        case 'authentication_successful': return '#059669';
+        default: return '#6B7280';
+      }
+    };
+
+    const getDecisionIcon = (decision) => {
+      switch(decision?.toLowerCase()) {
+        case 'challenge_requested': return '🔐';
+        case 'frictionless': return '✅';
+        case 'not_supported': return '❌';
+        case 'authentication_failed': return '⚠️';
+        case 'authentication_successful': return '🎉';
+        default: return '📋';
+      }
+    };
+
     return (
       <div style={{ marginBottom: '24px' }}>
         <div style={{ 
@@ -297,49 +319,63 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
         </div>
         
         <div style={{ display: 'grid', gap: '12px' }}>
-          {Object.entries(data).map(([key, value]) => (
-            <div key={key} style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              padding: '12px 16px',
-              backgroundColor: '#f8f9fa',
-              borderRadius: '8px',
-              border: '1px solid #e9ecef'
-            }}>
-              <span style={{
-                fontWeight: '500',
-                color: '#495057',
-                fontSize: '0.9rem',
-                minWidth: '120px',
-                marginRight: '16px'
+          {Object.entries(data).map(([key, value]) => {
+            const isDecision = key === 'decision';
+            const decisionColor = isDecision ? getDecisionColor(value) : null;
+            const decisionIcon = isDecision ? getDecisionIcon(value) : null;
+            
+            return (
+              <div key={key} style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                padding: '12px 16px',
+                backgroundColor: isDecision ? `${decisionColor}15` : '#f8f9fa',
+                borderRadius: '8px',
+                border: isDecision ? `2px solid ${decisionColor}40` : '1px solid #e9ecef',
+                boxShadow: isDecision ? `0 2px 8px ${decisionColor}20` : 'none'
               }}>
-                {getDisplayKey(key)}:
-              </span>
-              <span style={{
-                color: '#212529',
-                fontSize: '0.9rem',
-                textAlign: 'right',
-                wordBreak: 'break-word',
-                fontFamily: key.includes('id') || key === 'routing_id' ? 'Monaco, Consolas, monospace' : 'inherit'
-              }}>
-                {key === 'routing_id' ? (
-                  <RoutingRuleTooltip routingId={value} rules={rules} displayedRules={displayedRules} apiResponse={title === 'API Response' ? data : null}>
-                    <span style={{
-                      cursor: 'help',
-                      textDecoration: 'underline',
-                      textDecorationStyle: 'dotted',
-                      color: title === 'API Response' ? '#007AFF' : '#34C759'
-                    }}>
-                      {renderValue(key, value)}
-                    </span>
-                  </RoutingRuleTooltip>
-                ) : (
-                  renderValue(key, value)
-                )}
-              </span>
-            </div>
-          ))}
+                <span style={{
+                  fontWeight: isDecision ? '600' : '500',
+                  color: isDecision ? decisionColor : '#495057',
+                  fontSize: '0.9rem',
+                  minWidth: '120px',
+                  marginRight: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}>
+                  {isDecision && <span style={{ fontSize: '1rem' }}>{decisionIcon}</span>}
+                  {getDisplayKey(key)}:
+                </span>
+                <span style={{
+                  color: isDecision ? decisionColor : '#212529',
+                  fontSize: isDecision ? '1rem' : '0.9rem',
+                  fontWeight: isDecision ? '700' : 'normal',
+                  textAlign: 'right',
+                  wordBreak: 'break-word',
+                  fontFamily: key.includes('id') || key === 'routing_id' ? 'Monaco, Consolas, monospace' : 'inherit',
+                  textTransform: isDecision ? 'uppercase' : 'none',
+                  letterSpacing: isDecision ? '0.5px' : '0'
+                }}>
+                  {key === 'routing_id' ? (
+                    <RoutingRuleTooltip routingId={value} rules={rules} displayedRules={displayedRules} apiResponse={title === 'API Response' ? data : null}>
+                      <span style={{
+                        cursor: 'help',
+                        textDecoration: 'underline',
+                        textDecorationStyle: 'dotted',
+                        color: title === 'API Response' ? '#007AFF' : '#34C759'
+                      }}>
+                        {renderValue(key, value)}
+                      </span>
+                    </RoutingRuleTooltip>
+                  ) : (
+                    renderValue(key, value)
+                  )}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
     );
