@@ -3,7 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import ApiKeyEntryPage from './components/ApiKeyEntryPage';
 import PaymentDetailsPage from './components/PaymentDetailsPage';
 import CardSelectionPage from './components/CardSelectionPage';
-import CardSelectionTest from './components/CardSelectionTest';
+// import CardSelectionTest from './components/CardSelectionTest';
 import ProgressBar from './components/ProgressBar';
 import './App.css'; // Import App.css
 

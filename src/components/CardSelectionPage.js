@@ -80,7 +80,6 @@ const RoutingRuleTooltip = ({ routingId, rules, displayedRules, apiResponse, chi
             position: 'absolute',
             top: '-6px',
             left: '50%',
-            transform: 'translateX(-50%)',
             width: '12px',
             height: '12px',
             backgroundColor: 'rgba(0, 0, 0, 0.95)',
@@ -225,12 +224,7 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
 
   if (!responseData && !requestData) return null;
 
-  const formatValue = (value) => {
-    if (typeof value === 'object' && value !== null) {
-      return JSON.stringify(value, null, 2);
-    }
-    return String(value);
-  };
+  
 
   const renderKeyValuePairs = (data, title, color) => {
     if (!data) return null;
@@ -420,7 +414,7 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
 
 const CardSelectionPage = () => {
   const location = useLocation();
-  const { apiKey, routingId, amount, currency, rules, routingConfigData, displayedRules } = location.state || {};
+  const { apiKey, routingId, amount, currency, rules, displayedRules } = location.state || {};
 
   const [selectedCardId, setSelectedCardId] = useState('');
   const [cardNumber, setCardNumber] = useState('');
