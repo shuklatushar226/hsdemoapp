@@ -65,16 +65,16 @@ const PaymentDetailsPage = () => {
   const [error, setError] = useState('');
 
   // Billing address state
-  const [billingAddress, setBillingAddress] = useState({
-    firstName: '',
-    lastName: '',
-    addressLine1: '',
-    addressLine2: '',
-    city: '',
-    state: '',
-    postalCode: '',
-    country: ''
-  });
+  // const [billingAddress, setBillingAddress] = useState({
+  //   firstName: '',
+  //   lastName: '',
+  //   addressLine1: '',
+  //   addressLine2: '',
+  //   city: '',
+  //   state: '',
+  //   postalCode: '',
+  //   country: ''
+  // });
 
   const [routingConfigData, setRoutingConfigData] = useState(null);
   const [routingConfigLoading, setRoutingConfigLoading] = useState(false);
@@ -157,13 +157,13 @@ const PaymentDetailsPage = () => {
     }
 
     // Validate required billing address fields
-    const requiredFields = ['firstName', 'lastName', 'addressLine1', 'city', 'state', 'postalCode', 'country'];
-    const missingFields = requiredFields.filter(field => !billingAddress[field].trim());
+    // const requiredFields = ['firstName', 'lastName', 'addressLine1', 'city', 'state', 'postalCode', 'country'];
+    // const missingFields = requiredFields.filter(field => !billingAddress[field].trim());
     
-    if (missingFields.length > 0) {
-      setError('Please fill in all required billing address fields.');
-      return;
-    }
+    // if (missingFields.length > 0) {
+    //   setError('Please fill in all required billing address fields.');
+    //   return;
+    // }
 
     // Get the specific rules displayed in the table
     const displayedRules = routingConfigData?.algorithm?.data?.rules || [];
@@ -174,7 +174,7 @@ const PaymentDetailsPage = () => {
         routingId: selectedRuleId,
         amount: numericAmount, // Send integer amount
         currency,
-        billingAddress, // Pass billing address data
+        // billingAddress, // Pass billing address data
         rules: rules, // Pass the original rules array
         routingConfigData: routingConfigData, // Pass the routing configuration data
         displayedRules: displayedRules, // Pass the specific rules shown in the table
