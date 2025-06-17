@@ -49,7 +49,10 @@ function AppContent() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>3DS Intelligence Flow</h1>
+        <div className="header-content">
+          <img src={require('./images/Juspay_Hyperswitch.jpg')} alt="Juspay Hyperswitch Logo" className="header-logo" />
+          <h1>3DS Intelligence Flow</h1>
+        </div>
       </header>
       <ProgressBar 
         currentStep={getCurrentStep()} 

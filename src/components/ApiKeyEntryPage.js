@@ -26,14 +26,14 @@ const ApiKeyEntryPage = () => {
     }
 
     try {
-      console.log('🔍 Attempting to fetch routing rules with API key:', keyToUse.substring(0, 20) + '...');
+      console.log('Attempting to fetch routing rules with API key:', keyToUse.substring(0, 20) + '...');
       
       // Try the specific endpoint first
       let response;
       let rules;
       
       try {
-        console.log('📡 Trying specific endpoint: /routing/active with 3DS filter...');
+        console.log('Trying specific endpoint: /routing/active with 3DS filter...');
         response = await axios.get(
           'https://integ.hyperswitch.io/api/routing/active?transaction_type=three_ds_authentication&limit=100',
           {
@@ -45,10 +45,10 @@ const ApiKeyEntryPage = () => {
           }
         );
         rules = response.data;
-        console.log('✅ Specific endpoint response:', response.status, response.statusText);
-        console.log('📊 Rules from specific endpoint:', rules);
+        console.log('Specific endpoint response:', response.status, response.statusText);
+        console.log('Rules from specific endpoint:', rules);
       } catch (specificError) {
-        console.log('⚠️ Specific endpoint failed, trying general routing endpoint...');
+        console.log('Specific endpoint failed, trying general routing endpoint...');
         console.log('Specific endpoint error:', specificError.response?.status, specificError.response?.statusText);
         
         // Fallback to general routing endpoint
@@ -64,52 +64,52 @@ const ApiKeyEntryPage = () => {
             }
           );
           rules = response.data;
-          console.log('✅ General endpoint response:', response.status, response.statusText);
-          console.log('📊 Rules from general endpoint:', rules);
+          console.log('General endpoint response:', response.status, response.statusText);
+          console.log('Rules from general endpoint:', rules);
         } catch (generalError) {
-          console.log('❌ General endpoint also failed');
+          console.log('General endpoint also failed');
           console.log('General endpoint error:', generalError.response?.status, generalError.response?.statusText);
           throw generalError; // Re-throw to be caught by outer catch
         }
       }
 
       // Enhanced debugging for the response
-      console.log('🔍 Full response object:', response);
-      console.log('📋 Response data type:', typeof rules);
-      console.log('📋 Response data:', rules);
+      console.log('Full response object:', response);
+      console.log('Response data type:', typeof rules);
+      console.log('Response data:', rules);
       
       if (Array.isArray(rules)) {
-        console.log('✅ Rules is an array with length:', rules.length);
+        console.log('Rules is an array with length:', rules.length);
         if (rules.length > 0) {
-          console.log('🎯 First rule structure:', rules[0]);
+          console.log('First rule structure:', rules[0]);
           const ruleIds = rules.map(rule => rule.id || rule.routing_id || rule.rule_id || rule.routing_rule_id || 'N/A (ID missing)');
-          console.log('🆔 Extracted Rule IDs:', ruleIds);
+          console.log('Extracted Rule IDs:', ruleIds);
         }
       } else if (rules && typeof rules === 'object') {
-        console.log('📦 Rules is an object, checking for nested arrays...');
-        console.log('🔑 Object keys:', Object.keys(rules));
+        console.log('Rules is an object, checking for nested arrays...');
+        console.log('Object keys:', Object.keys(rules));
         
         // Check if rules are nested in the response
         if (rules.data && Array.isArray(rules.data)) {
-          console.log('✅ Found rules in .data property');
+          console.log('Found rules in .data property');
           rules = rules.data;
         } else if (rules.records && Array.isArray(rules.records)) {
-          console.log('✅ Found rules in .records property');
+          console.log('Found rules in .records property');
           rules = rules.records;
         } else if (rules.results && Array.isArray(rules.results)) {
-          console.log('✅ Found rules in .results property');
+          console.log('Found rules in .results property');
           rules = rules.results;
         }
       }
 
       if (!rules || (Array.isArray(rules) && rules.length === 0)) {
-        console.log('❌ No routing rules found');
+        console.log('No routing rules found');
         setError('No routing rules found for this API key. This could mean: 1) No rules are configured, 2) API key lacks permissions, or 3) Rules are in a different format than expected. Check browser console for detailed response.');
         setLoading(false);
         return;
       }
 
-      console.log('🚀 Successfully found rules, navigating to payment details...');
+      console.log('Successfully found rules, navigating to payment details...');
       // Navigate to the payment details page with API key and rules
       navigate('/payment-details', {
         state: {
@@ -264,21 +264,20 @@ const ApiKeyEntryPage = () => {
           </div>
         )}
 
-        {/* Powered by Hyperswitch */}
-          <div style={{ 
-            textAlign: 'center', 
-            marginTop: '16px', 
-            marginBottom: '8px',
-            fontSize: '0.85rem',
-            color: '#9CA3AF'
-          }}>
-            powered by <span style={{ fontWeight: '500', color: '#6B7280' }}>hyperswitch</span>
-          </div>
-
         <button type="submit" disabled={loading}>
           {loading ? 'Fetching Rules...' : 'Enter Payment Details'}
         </button>
         {error && <p className="error-message" style={{marginTop: '15px'}}>{error}</p>}
+        
+        {/* Powered by Hyperswitch */}
+        <div style={{ 
+          textAlign: 'center', 
+          marginTop: '16px', 
+          fontSize: '0.85rem',
+          color: '#9CA3AF'
+        }}>
+          powered by <span style={{ fontWeight: '500', color: '#6B7280' }}>hyperswitch</span>
+        </div>
       </form>
     </div>
   );

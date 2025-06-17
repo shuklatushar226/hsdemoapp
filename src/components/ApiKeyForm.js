@@ -158,12 +158,10 @@ const ApiKeyForm = ({ onApiKeySubmit, loading = false, error = '' }) => {
         >
           {isValidating || loading ? (
             <>
-              <span style={{ marginRight: 'var(--spacing-sm)' }}>⏳</span>
               Validating API Key...
             </>
           ) : (
             <>
-              <span style={{ marginRight: 'var(--spacing-sm)' }}>🔑</span>
               Continue with API Key
             </>
           )}
@@ -188,7 +186,7 @@ const ApiKeyForm = ({ onApiKeySubmit, loading = false, error = '' }) => {
           color: 'var(--text-primary)',
           fontSize: '0.9rem'
         }}>
-          🔒 Security Notice
+          Security Notice
         </h4>
         <p style={{ 
           margin: 0,

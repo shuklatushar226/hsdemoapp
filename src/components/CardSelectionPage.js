@@ -296,12 +296,12 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
 
     const getDecisionIcon = (decision) => {
       switch(decision?.toLowerCase()) {
-        case 'challenge_requested': return '🔐';
-        case 'frictionless': return '✅';
-        case 'not_supported': return '❌';
-        case 'authentication_failed': return '⚠️';
-        case 'authentication_successful': return '🎉';
-        default: return '📋';
+        case 'challenge_requested': return '';
+        case 'frictionless': return '';
+        case 'not_supported': return '';
+        case 'authentication_failed': return '';
+        case 'authentication_successful': return '';
+        default: return '';
       }
     };
 
@@ -377,7 +377,7 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
                         cursor: 'help',
                         textDecoration: 'underline',
                         textDecorationStyle: 'dotted',
-                        color: title === 'API Response' ? '#007AFF' : '#34C759'
+                        color: title === 'API Response' ? '#007AFF' : '#0099FF'
                       }}>
                         {renderValue(key, value)}
                       </span>
@@ -424,7 +424,7 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
               transition: 'all 0.2s ease'
             }}
           >
-            📊 Response
+            Response
           </button>
         )}
         {requestData && (
@@ -434,7 +434,7 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
               flex: 1,
               padding: '16px',
               border: 'none',
-              backgroundColor: activeTab === 'request' ? '#34C759' : 'transparent',
+              backgroundColor: activeTab === 'request' ? '#0099FF' : 'transparent',
               color: activeTab === 'request' ? 'white' : '#6c757d',
               fontWeight: '500',
               fontSize: '0.9rem',
@@ -442,7 +442,7 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
               transition: 'all 0.2s ease'
             }}
           >
-            📤 Request
+            Request
           </button>
         )}
       </div>
@@ -453,7 +453,7 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
           renderKeyValuePairs(responseData, 'API Response', '#007AFF')
         }
         {activeTab === 'request' && requestData && 
-          renderKeyValuePairs(requestData, 'Request Payload', '#34C759')
+          renderKeyValuePairs(requestData, 'Request Payload', '#0099FF')
         }
       </div>
     </div>
@@ -745,21 +745,20 @@ const CardSelectionPage = () => {
             </div>
           </div>
 
+          <button type="submit" form="payment-form" disabled={loading || !selectedCardId} style={{ marginTop: '8px', width: '100%' }}>
+            {loading ? 'Processing...' : `Pay ${amount} ${currency}`}
+          </button>
+          {error && <p className="error-message" style={{ marginTop: '15px' }}>{error}</p>}
+
           {/* Powered by Hyperswitch */}
           <div style={{ 
             textAlign: 'center', 
             marginTop: '16px', 
-            marginBottom: '8px',
             fontSize: '0.85rem',
             color: '#9CA3AF'
           }}>
             powered by <span style={{ fontWeight: '500', color: '#6B7280' }}>hyperswitch</span>
           </div>
-
-          <button type="submit" form="payment-form" disabled={loading || !selectedCardId} style={{ marginTop: '8px', width: '100%' }}>
-            {loading ? 'Processing...' : `Pay ${amount} ${currency}`}
-          </button>
-          {error && <p className="error-message" style={{ marginTop: '15px' }}>{error}</p>}
 
           
         </div>

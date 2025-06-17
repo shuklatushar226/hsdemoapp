@@ -393,14 +393,13 @@ const PaymentDetailsPage = () => {
             </div> */}
             
             <div className="form-footer">
-              <div className="powered-by">
-                powered by <span className="brand">hyperswitch</span>
-              </div>
               <button type="submit" disabled={!selectedRuleId} className="submit-button">
                 Select Card
-                <span className="button-arrow">→</span>
               </button>
               {error && <div className="error-message">{error}</div>}
+              <div className="powered-by" style={{ marginTop: '24px' }}>
+                powered by <span className="brand">hyperswitch</span>
+              </div>
             </div>
           </form>
         </div>

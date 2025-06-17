@@ -48,7 +48,7 @@ const ProgressBar = ({ currentStep, totalSteps, steps }) => {
                 title={index + 1 <= currentStep ? `Go to ${step}` : ''}
               >
                 {index + 1 < currentStep ? (
-                  <span className="progress-step-check">✓</span>
+                  <span className="progress-step-check">v</span>
                 ) : (
                   <span className="progress-step-number">{index + 1}</span>
                 )}
