@@ -265,6 +265,10 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
         }
         return 'Complex Object';
       }
+      // Replace underscores with spaces for decision values
+      if (key === 'decision') {
+        return String(value).replace(/_/g, ' ');
+      }
       return String(value);
     };
 

@@ -64,6 +64,18 @@ const PaymentDetailsPage = () => {
   const [selectedRuleId, setSelectedRuleId] = useState('');
   const [error, setError] = useState('');
 
+  // Billing address state
+  const [billingAddress, setBillingAddress] = useState({
+    firstName: '',
+    lastName: '',
+    addressLine1: '',
+    addressLine2: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    country: ''
+  });
+
   const [routingConfigData, setRoutingConfigData] = useState(null);
   const [routingConfigLoading, setRoutingConfigLoading] = useState(false);
   const [routingConfigError, setRoutingConfigError] = useState('');
@@ -144,6 +156,15 @@ const PaymentDetailsPage = () => {
         return;
     }
 
+    // Validate required billing address fields
+    const requiredFields = ['firstName', 'lastName', 'addressLine1', 'city', 'state', 'postalCode', 'country'];
+    const missingFields = requiredFields.filter(field => !billingAddress[field].trim());
+    
+    if (missingFields.length > 0) {
+      setError('Please fill in all required billing address fields.');
+      return;
+    }
+
     // Get the specific rules displayed in the table
     const displayedRules = routingConfigData?.algorithm?.data?.rules || [];
     
@@ -153,6 +174,7 @@ const PaymentDetailsPage = () => {
         routingId: selectedRuleId,
         amount: numericAmount, // Send integer amount
         currency,
+        billingAddress, // Pass billing address data
         rules: rules, // Pass the original rules array
         routingConfigData: routingConfigData, // Pass the routing configuration data
         displayedRules: displayedRules, // Pass the specific rules shown in the table
@@ -162,7 +184,7 @@ const PaymentDetailsPage = () => {
 
   return (
     <div className="page-container payment-details-container">
-      <h2>Config 3DS Rules</h2>
+      <h2>Enter Payment Details</h2>
 
       {/* Side-by-side layout */}
       <div className="payment-details-layout">
@@ -227,6 +249,129 @@ const PaymentDetailsPage = () => {
                 <div className="select-arrow">▼</div>
               </div>
             </div>
+
+            {/* Billing Address Section */}
+            <div className="billing-address-section">
+              <h4 className="section-title">Billing Address</h4>
+              
+              <div className="form-row">
+                <div className="form-group form-group-half">
+                  <label htmlFor="firstName">First Name</label>
+                  <input
+                    id="firstName"
+                    type="text"
+                    placeholder="First Name"
+                    value={billingAddress.firstName}
+                    onChange={(e) => setBillingAddress(prev => ({ ...prev, firstName: e.target.value }))}
+                    required
+                    className="billing-input"
+                  />
+                </div>
+                <div className="form-group form-group-half">
+                  <label htmlFor="lastName">Last Name</label>
+                  <input
+                    id="lastName"
+                    type="text"
+                    placeholder="Last Name"
+                    value={billingAddress.lastName}
+                    onChange={(e) => setBillingAddress(prev => ({ ...prev, lastName: e.target.value }))}
+                    required
+                    className="billing-input"
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="addressLine1">Address Line 1</label>
+                <input
+                  id="addressLine1"
+                  type="text"
+                  placeholder="Street address"
+                  value={billingAddress.addressLine1}
+                  onChange={(e) => setBillingAddress(prev => ({ ...prev, addressLine1: e.target.value }))}
+                  required
+                  className="billing-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="addressLine2">Address Line 2 (Optional)</label>
+                <input
+                  id="addressLine2"
+                  type="text"
+                  placeholder="Apartment, suite, etc."
+                  value={billingAddress.addressLine2}
+                  onChange={(e) => setBillingAddress(prev => ({ ...prev, addressLine2: e.target.value }))}
+                  className="billing-input"
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group form-group-half">
+                  <label htmlFor="city">City</label>
+                  <input
+                    id="city"
+                    type="text"
+                    placeholder="City"
+                    value={billingAddress.city}
+                    onChange={(e) => setBillingAddress(prev => ({ ...prev, city: e.target.value }))}
+                    required
+                    className="billing-input"
+                  />
+                </div>
+                <div className="form-group form-group-half">
+                  <label htmlFor="state">State/Province</label>
+                  <input
+                    id="state"
+                    type="text"
+                    placeholder="State/Province"
+                    value={billingAddress.state}
+                    onChange={(e) => setBillingAddress(prev => ({ ...prev, state: e.target.value }))}
+                    required
+                    className="billing-input"
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group form-group-half">
+                  <label htmlFor="postalCode">Postal Code</label>
+                  <input
+                    id="postalCode"
+                    type="text"
+                    placeholder="Postal Code"
+                    value={billingAddress.postalCode}
+                    onChange={(e) => setBillingAddress(prev => ({ ...prev, postalCode: e.target.value }))}
+                    required
+                    className="billing-input"
+                  />
+                </div>
+                <div className="form-group form-group-half">
+                  <label htmlFor="country">Country</label>
+                  <div className="select-wrapper">
+                    <select
+                      id="country"
+                      value={billingAddress.country}
+                      onChange={(e) => setBillingAddress(prev => ({ ...prev, country: e.target.value }))}
+                      required
+                      className="billing-select"
+                    >
+                      <option value="" disabled>Select Country</option>
+                      <option value="US">United States</option>
+                      <option value="CA">Canada</option>
+                      <option value="GB">United Kingdom</option>
+                      <option value="DE">Germany</option>
+                      <option value="FR">France</option>
+                      <option value="IN">India</option>
+                      <option value="AU">Australia</option>
+                      <option value="JP">Japan</option>
+                      <option value="NL">Netherlands</option>
+                    </select>
+                    <div className="select-arrow">▼</div>
+                  </div>
+                </div>
+              </div>
+            </div>
             
             <div className="form-footer">
               <div className="powered-by">
@@ -234,6 +379,7 @@ const PaymentDetailsPage = () => {
               </div>
               <button type="submit" disabled={!selectedRuleId} className="submit-button">
                 Select Card
+                <span className="button-arrow">→</span>
               </button>
               {error && <div className="error-message">{error}</div>}
             </div>
@@ -285,7 +431,7 @@ const PaymentDetailsPage = () => {
                                   <td className="rule-decision">
                                     <span className="decision-badge">
                                       {rule.connectorSelection && rule.connectorSelection.decision !== undefined
-                                        ? String(rule.connectorSelection.decision)
+                                        ? String(rule.connectorSelection.decision).replace(/_/g, ' ')
                                         : 'N/A'}
                                     </span>
                                   </td>
