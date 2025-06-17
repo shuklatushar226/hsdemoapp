@@ -184,7 +184,7 @@ const PaymentDetailsPage = () => {
 
   return (
     <div className="page-container payment-details-container">
-      <h2>Enter Payment Details</h2>
+      <h2>Configure 3DS</h2>
 
       {/* Side-by-side layout */}
       <div className="payment-details-layout">
@@ -250,7 +250,7 @@ const PaymentDetailsPage = () => {
               </div>
             </div>
 
-            {/* Billing Address Section */}
+            {/* Billing Address Section
             <div className="billing-address-section">
               <h4 className="section-title">Billing Address</h4>
               
@@ -371,7 +371,7 @@ const PaymentDetailsPage = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             
             <div className="form-footer">
               <div className="powered-by">

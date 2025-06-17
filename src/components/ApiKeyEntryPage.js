@@ -257,7 +257,7 @@ const ApiKeyEntryPage = () => {
                 lineHeight: '1.3',
                 fontWeight: '500'
               }}>
-               Ready to go! Using the default test API key for quick demonstration. 
+               Using the default test API key for quick demonstration. 
                 You can uncheck the option above to enter your own API key.
               </small>
             </div>

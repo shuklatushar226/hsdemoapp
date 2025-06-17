@@ -82,7 +82,7 @@ const InitialPaymentForm = () => {
 
   return (
     <div className="form-container">
-      <h2>Enter Payment Details</h2>
+      <h2>Configure 3DS</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="apiKey">API Key:</label>
