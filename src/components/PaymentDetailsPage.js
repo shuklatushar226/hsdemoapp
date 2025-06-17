@@ -26,16 +26,35 @@ const ConditionDisplay = ({ statementsData }) => {
     if (!statement || !Array.isArray(statement.condition) || statement.condition.length === 0) {
       return `(Statement ${stmtIndex + 1} has no conditions)`;
     }
-    const conditionParts = statement.condition.map(cond => {
+    const conditionParts = statement.condition.map((cond, condIndex) => {
       const lhs = cond.lhs || 'unknown_field';
       const comparisonOperator = formatComparison(cond.comparison);
       // value can be an object like { type: "enum_variant", value: "Poland" } or a primitive
       const rhsValue = (typeof cond.value === 'object' && cond.value !== null && cond.value.hasOwnProperty('value'))
         ? cond.value.value
         : cond.value;
-      return `${String(lhs).replace(/_/g, ' ')} ${comparisonOperator} ${String(rhsValue)}`;
+      const fieldName = String(lhs).replace(/_/g, ' ');
+      const operator = comparisonOperator;
+      const value = String(rhsValue);
+      return (
+        <React.Fragment key={condIndex}>
+          {condIndex > 0 && <span style={{ color: '#6B7280', margin: '0 8px', fontWeight: '500' }}> AND </span>}
+          <span style={{ 
+            padding: '2px 6px', 
+            borderRadius: '4px', 
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            border: '1px solid rgba(59, 130, 246, 0.2)',
+            display: 'inline-block',
+            margin: '2px'
+          }}>
+            <span style={{ color: '#3B82F6', fontWeight: '600' }}>{fieldName}</span>
+            <span style={{ color: '#6B7280', margin: '0 4px' }}>{operator}</span>
+            <span style={{ color: '#10B981', fontWeight: '500' }}>{value}</span>
+          </span>
+        </React.Fragment>
+      );
     });
-    return conditionParts.join(' AND ');
+    return conditionParts;
   });
 
   // If multiple statements, join them by OR (or display separately)

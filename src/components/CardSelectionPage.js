@@ -158,9 +158,18 @@ const RoutingRuleTooltip = ({ routingId, rules, displayedRules, apiResponse, chi
                               return (
                                 <span key={condIndex}>
                                   {condIndex > 0 && <span style={{ color: '#90CAF9' }}> AND </span>}
-                                  <span style={{ color: '#FFB74D' }}>{lhs}</span>
-                                  <span style={{ color: '#B0BEC5' }}> {comparison} </span>
-                                  <span style={{ color: '#A5D6A7' }}>{value}</span>
+                                  <span style={{ 
+                                    padding: '2px 6px', 
+                                    borderRadius: '4px', 
+                                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                                    display: 'inline-block',
+                                    margin: '2px'
+                                  }}>
+                                    <span style={{ color: '#4FC3F7', fontWeight: '600' }}>{lhs}</span>
+                                    <span style={{ color: '#B0BEC5', margin: '0 4px' }}>{comparison}</span>
+                                    <span style={{ color: '#81C784', fontWeight: '500' }}>{value}</span>
+                                  </span>
                                 </span>
                               );
                             })}
@@ -718,7 +727,7 @@ const CardSelectionPage = () => {
                   <option value="" disabled>-- Select a Card --</option>
                   {cards.map(card => (
                     <option key={card.id} value={card.id}>
-                      {card.name} ({card.issuerName}) - Ends in {card.number.slice(-4)}
+                      {card.name} ({card.issuerName}) - **** **** **** {card.number.slice(-4)}
                     </option>
                   ))}
                 </select>
