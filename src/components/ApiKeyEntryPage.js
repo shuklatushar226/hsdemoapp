@@ -139,12 +139,12 @@ const ApiKeyEntryPage = () => {
     }
   };
 
-  const handleDefaultKeyToggle = (e) => {
-    setUseDefaultKey(e.target.checked);
-    if (e.target.checked) {
-      setApiKey('');
-    }
-  };
+  // const handleDefaultKeyToggle = (e) => {
+  //   setUseDefaultKey(e.target.checked);
+  //   if (e.target.checked) {
+  //     setApiKey('');
+  //   }
+  // };
 
   return (
     <div className="form-container">
