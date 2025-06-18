@@ -128,7 +128,7 @@ const RoutingRuleTooltip = ({ routingId, rules, displayedRules, apiResponse, chi
                   </div>
                   
                   <div style={{ 
-                    fontFamily: 'Monaco, Consolas, monospace',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
                     fontSize: '0.8rem',
                     lineHeight: '1.6',
                     color: '#E8F5E8'
@@ -285,11 +285,11 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
 
     const getDecisionColor = (decision) => {
       switch(decision?.toLowerCase()) {
-        case 'challenge_requested': return '#FF6B35';
-        case 'frictionless': return '#10B981';
+        case 'challenge_requested': return '#6B7280';
+        case 'frictionless': return '#6B7280';
         case 'not_supported': return '#6B7280';
-        case 'authentication_failed': return '#DC2626';
-        case 'authentication_successful': return '#059669';
+        case 'authentication_failed': return '#6B7280';
+        case 'authentication_successful': return '#6B7280';
         default: return '#6B7280';
       }
     };
@@ -367,12 +367,12 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
                   fontWeight: isDecision ? '700' : 'normal',
                   textAlign: 'right',
                   wordBreak: 'break-word',
-                  fontFamily: key.includes('id') || key === 'routing_id' ? 'Monaco, Consolas, monospace' : 'inherit',
-                  textTransform: isDecision ? 'uppercase' : 'none',
+                  fontFamily: key.includes('id') || key === 'routing_id' ? '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif' : 'inherit',
+                  textTransform: isDecision ? 'capitalize' : 'none',
                   letterSpacing: isDecision ? '0.5px' : '0'
                 }}>
                   {key === 'routing_id' ? (
-                    <RoutingRuleTooltip routingId={value} rules={rules} displayedRules={displayedRules} apiResponse={title === 'API Response' ? data : null}>
+                    <RoutingRuleTooltip routingId={value} rules={rules} displayedRules={displayedRules} apiResponse={title === 'Response' ? data : null}>
                       <span style={{
                         cursor: 'help',
                         textDecoration: 'underline',
@@ -773,7 +773,7 @@ const CardSelectionPage = () => {
           ) : (
             <div className="api-response-placeholder">
               <h3 style={{ color: '#6E6E73', marginBottom: '15px', fontSize: '1.3em', fontWeight: '600' }}>Transaction Details</h3>
-              <p style={{ color: '#8E8E93', fontStyle: 'italic' }}>Submit the form to see the API response here</p>
+              <p style={{ color: '#8E8E93', fontStyle: 'italic' }}>Submit the form to see the response here</p>
             </div>
           )}
         </div>

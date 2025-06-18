@@ -240,7 +240,7 @@ const CardSelectionTest = () => {
           ) : (
             <div className="api-response-placeholder">
               <h3 style={{ color: '#6E6E73', marginBottom: '15px', fontSize: '1.3em', fontWeight: '600' }}>Transaction Details</h3>
-              <p style={{ color: '#8E8E93', fontStyle: 'italic' }}>Submit the form to see the API response here</p>
+              <p style={{ color: '#8E8E93', fontStyle: 'italic' }}>Submit the form to see the response here</p>
             </div>
           )}
         </div>

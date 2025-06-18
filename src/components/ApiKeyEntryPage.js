@@ -150,73 +150,189 @@ const ApiKeyEntryPage = () => {
     <div className="form-container">
       <h2>Enter API Key</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="apiKey">API Key:</label>
-          <input
-            id="apiKey"
-            type="text" // Consider type="password" if it's sensitive and should be masked
-            placeholder="Your API Key"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            required={!useDefaultKey}
-            disabled={useDefaultKey}
-          />
-        </div>
-
-        {/* Default API Key Option - Below Input */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          marginBottom: '16px',
-          padding: '12px 16px',
-          background: 'linear-gradient(135deg, #f8faff 0%, #e8f4fd 100%)',
-          borderRadius: '12px',
-          border: '2px solid transparent',
-          backgroundImage: 'linear-gradient(135deg, #f8faff 0%, #e8f4fd 100%), linear-gradient(135deg, #4285F4, #667eea)',
-          backgroundOrigin: 'border-box',
-          backgroundClip: 'padding-box, border-box',
-          gap: '12px',
-          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          boxShadow: '0 4px 16px rgba(66, 133, 244, 0.1), 0 1px 4px rgba(0, 0, 0, 0.04)',
-          cursor: 'pointer',
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-        onClick={() => setUseDefaultKey(!useDefaultKey)}
-        >
-          <input
-            id="useDefaultKey"
-            type="checkbox"
-            checked={useDefaultKey}
-            onChange={handleDefaultKeyToggle}
-            style={{ 
-              margin: 0,
-              width: '20px',
-              height: '20px',
-              cursor: 'pointer',
-              accentColor: '#4285F4'
-            }}
-          />
-          <label htmlFor="useDefaultKey" style={{ 
-            margin: 0, 
-            fontSize: '1.1rem',
-            cursor: 'pointer',
-            color: '#333333',
-            fontWeight: '600',
-            flex: 1
+        {/* API Key Options */}
+        <div style={{ marginBottom: '30px' }}>
+          <h3 style={{ 
+            fontSize: '1.1rem', 
+            fontWeight: '600', 
+            color: '#374151', 
+            marginBottom: '20px',
+            textAlign: 'center'
           }}>
-            Default API key
-          </label>
+            Choose API Key Option
+          </h3>
+          
+          {/* Custom API Key Option */}
+          <div 
+            onClick={() => setUseDefaultKey(false)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '20px 24px',
+              border: `2px solid ${!useDefaultKey ? '#4285F4' : '#E5E7EB'}`,
+              borderRadius: '12px',
+              marginBottom: '16px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              background: !useDefaultKey ? 'linear-gradient(135deg, #F0F8FF 0%, #E6F3FF 100%)' : '#ffffff',
+              boxShadow: !useDefaultKey ? '0 4px 12px rgba(66, 133, 244, 0.15)' : '0 2px 4px rgba(0, 0, 0, 0.05)',
+              gap: '16px',
+              transform: !useDefaultKey ? 'translateY(-2px)' : 'translateY(0)'
+            }}
+          >
+            <div style={{
+              width: '24px',
+              height: '24px',
+              borderRadius: '50%',
+              border: `2px solid ${!useDefaultKey ? '#4285F4' : '#D1D5DB'}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: !useDefaultKey ? '#4285F4' : 'transparent',
+              flexShrink: 0,
+              transition: 'all 0.3s ease'
+            }}>
+              {!useDefaultKey && (
+                <div style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  background: 'white'
+                }} />
+              )}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: !useDefaultKey ? '#1E40AF' : '#374151',
+                marginBottom: '4px'
+              }}>
+                Enter Custom API Key
+              </div>
+              <div style={{
+                fontSize: '0.875rem',
+                color: !useDefaultKey ? '#3B82F6' : '#6B7280',
+                lineHeight: '1.4'
+              }}>
+                Use your own Hyperswitch API key for production or testing
+              </div>
+            </div>
+          </div>
+
+          {/* Default API Key Option */}
+          <div 
+            onClick={() => setUseDefaultKey(true)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '20px 24px',
+              border: `2px solid ${useDefaultKey ? '#10B981' : '#E5E7EB'}`,
+              borderRadius: '12px',
+              marginBottom: '20px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              background: useDefaultKey ? 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)' : '#ffffff',
+              boxShadow: useDefaultKey ? '0 4px 12px rgba(16, 185, 129, 0.15)' : '0 2px 4px rgba(0, 0, 0, 0.05)',
+              gap: '16px',
+              transform: useDefaultKey ? 'translateY(-2px)' : 'translateY(0)'
+            }}
+          >
+            <div style={{
+              width: '24px',
+              height: '24px',
+              borderRadius: '50%',
+              border: `2px solid ${useDefaultKey ? '#10B981' : '#D1D5DB'}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: useDefaultKey ? '#10B981' : 'transparent',
+              flexShrink: 0,
+              transition: 'all 0.3s ease'
+            }}>
+              {useDefaultKey && (
+                <div style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  background: 'white'
+                }} />
+              )}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: useDefaultKey ? '#065F46' : '#374151',
+                marginBottom: '4px'
+              }}>
+                Use Default API Key
+              </div>
+              <div style={{
+                fontSize: '0.875rem',
+                color: useDefaultKey ? '#059669' : '#6B7280',
+                lineHeight: '1.4'
+              }}>
+                Quick start with our demo API key for testing purposes
+              </div>
+            </div>
+          </div>
         </div>
 
+        {/* Custom API Key Input */}
+        {!useDefaultKey && (
+          <div className="form-group" style={{ marginBottom: '24px' }}>
+            <label htmlFor="apiKey" style={{
+              fontSize: '1rem',
+              fontWeight: '600',
+              color: '#374151',
+              marginBottom: '8px',
+              display: 'block'
+            }}>
+              Enter Your API Key:
+            </label>
+            <input
+              id="apiKey"
+              type="text"
+              placeholder="snd_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              required={!useDefaultKey}
+              style={{
+                width: '100%',
+                padding: '16px 20px',
+                border: '2px solid #E5E7EB',
+                borderRadius: '12px',
+                fontSize: '0.95rem',
+                fontWeight: '500',
+                background: '#ffffff',
+                color: '#374151',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
+                boxSizing: 'border-box'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#4285F4';
+                e.target.style.boxShadow = '0 0 0 3px rgba(66, 133, 244, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#E5E7EB';
+                e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
+              }}
+            />
+          </div>
+        )}
+
+        {/* Default API Key Info */}
         {useDefaultKey && (
           <div style={{
-            padding: '12px 16px',
-            background: 'linear-gradient(135deg, #e8f5e8 0%, #f0fff0 100%)',
-            borderRadius: '10px',
+            padding: '20px 24px',
+            background: 'linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%)',
+            borderRadius: '12px',
             border: '2px solid #10B981',
-            marginBottom: '16px',
-            boxShadow: '0 2px 12px rgba(16, 185, 129, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)',
+            marginBottom: '24px',
+            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.1)',
             position: 'relative',
             overflow: 'hidden'
           }}>
@@ -225,58 +341,137 @@ const ApiKeyEntryPage = () => {
               top: 0,
               left: 0,
               right: 0,
-              height: '2px',
-              background: 'linear-gradient(90deg, #10B981, #34D399, #10B981)',
-              borderRadius: '10px 10px 0 0'
+              height: '3px',
+              background: 'linear-gradient(90deg, #10B981, #34D399, #10B981)'
             }}></div>
+            
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              marginBottom: '8px'
+              marginBottom: '12px',
+              gap: '8px'
+            }}>
+              <span style={{ fontSize: '1.2rem' }}>✓</span>
+              <h4 style={{
+                margin: 0,
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#065F46'
+              }}>
+                Default API Key Active
+              </h4>
+            </div>
+            
+            <div style={{
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              border: '1px solid rgba(16, 185, 129, 0.2)',
+              marginBottom: '12px'
             }}>
               <p style={{ 
                 margin: 0,
-                fontSize: '0.85rem',
-                color: '#065f46',
-                fontFamily: 'Monaco, Consolas, monospace',
-                fontWeight: '600'
+                fontSize: '0.875rem',
+                color: '#065F46',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
+                fontWeight: '500',
+                wordBreak: 'break-all'
               }}>
-                <strong>Default API Key Active:</strong> {defaultApiKey.substring(0, 25)}...
+                <strong>API Key:</strong> {defaultApiKey.substring(0, 30)}...
               </p>
             </div>
+            
             <div style={{
-              backgroundColor: 'rgba(16, 185, 129, 0.1)',
-              padding: '8px 10px',
-              borderRadius: '6px',
-              border: '1px solid rgba(16, 185, 129, 0.2)'
+              fontSize: '0.875rem',
+              color: '#047857',
+              lineHeight: '1.5',
+              fontWeight: '500'
             }}>
-              <small style={{ 
-                color: '#047857', 
-                fontSize: '0.75rem',
-                display: 'block',
-                lineHeight: '1.3',
-                fontWeight: '500'
-              }}>
-               Using the default test API key for quick demonstration. 
-                You can uncheck the option above to enter your own API key.
-              </small>
+              Perfect for testing! This demo API key lets you explore all features without setup.
+              Switch to "Custom API Key" above to use your own production key.
             </div>
           </div>
         )}
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Fetching Rules...' : 'Enter Payment Details'}
+        <button 
+          type="submit" 
+          disabled={loading || (!useDefaultKey && !apiKey)}
+          style={{
+            width: '100%',
+            padding: '16px 24px',
+            background: loading || (!useDefaultKey && !apiKey) ? '#9CA3AF' : '#4285F4',
+            color: 'white',
+            border: 'none',
+            borderRadius: '12px',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: loading || (!useDefaultKey && !apiKey) ? 'not-allowed' : 'pointer',
+            transition: 'all 0.3s ease',
+            boxShadow: loading || (!useDefaultKey && !apiKey) ? 'none' : '0 4px 12px rgba(66, 133, 244, 0.3)',
+            transform: loading || (!useDefaultKey && !apiKey) ? 'none' : 'translateY(0)',
+            opacity: loading || (!useDefaultKey && !apiKey) ? 0.7 : 1
+          }}
+          onMouseEnter={(e) => {
+            if (!loading && (useDefaultKey || apiKey)) {
+              e.target.style.background = '#3367D6';
+              e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 6px 16px rgba(66, 133, 244, 0.4)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!loading && (useDefaultKey || apiKey)) {
+              e.target.style.background = '#4285F4';
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 4px 12px rgba(66, 133, 244, 0.3)';
+            }
+          }}
+        >
+          {loading ? (
+            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <span style={{
+                width: '16px',
+                height: '16px',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                borderTop: '2px solid white',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite'
+              }}></span>
+              Fetching Rules...
+            </span>
+          ) : (
+            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              Continue to Payment Details
+            </span>
+          )}
         </button>
-        {error && <p className="error-message" style={{marginTop: '15px'}}>{error}</p>}
+        
+        {error && (
+          <div style={{
+            marginTop: '20px',
+            padding: '16px 20px',
+            background: 'linear-gradient(135deg, #FEF2F2 0%, #FECACA 100%)',
+            border: '2px solid #F87171',
+            borderRadius: '12px',
+            color: '#DC2626',
+            fontSize: '0.875rem',
+            fontWeight: '500',
+            lineHeight: '1.5'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <strong>Error</strong>
+            </div>
+            {error}
+          </div>
+        )}
         
         {/* Powered by Hyperswitch */}
         <div style={{ 
           textAlign: 'center', 
-          marginTop: '16px', 
-          fontSize: '0.85rem',
+          marginTop: '24px', 
+          fontSize: '0.875rem',
           color: '#9CA3AF'
         }}>
-          powered by <span style={{ fontWeight: '500', color: '#6B7280' }}>hyperswitch</span>
+          powered by <span style={{ fontWeight: '600', color: '#6B7280' }}>hyperswitch</span>
         </div>
       </form>
     </div>
