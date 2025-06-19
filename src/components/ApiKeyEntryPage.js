@@ -151,7 +151,7 @@ const ApiKeyEntryPage = () => {
       <h2>Enter API Key</h2>
       <form onSubmit={handleSubmit}>
         {/* API Key Options */}
-        <div style={{ marginBottom: '30px' }}>
+        <div style={{ marginBottom: '20px' }}>
           <h3 style={{ 
             fontSize: '1.1rem', 
             fontWeight: '600', 
@@ -294,7 +294,7 @@ const ApiKeyEntryPage = () => {
             <input
               id="apiKey"
               type="text"
-              placeholder="snd_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              placeholder="snd_ABCDEF123456"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
               required={!useDefaultKey}
@@ -385,7 +385,7 @@ const ApiKeyEntryPage = () => {
               lineHeight: '1.5',
               fontWeight: '500'
             }}>
-              Perfect for testing! This demo API key lets you explore all features without setup.
+              This demo API key lets you explore all features without setup.
               Switch to "Custom API Key" above to use your own production key.
             </div>
           </div>
