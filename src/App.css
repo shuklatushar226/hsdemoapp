@@ -29,10 +29,10 @@
   z-index: -1;
 }
 
-/* Professional Header Styling */
+/* Compact Header Styling */
 .App-header {
-  padding: var(--spacing-xs) var(--spacing-md);
-  margin-bottom: var(--spacing-sm);
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
   position: relative;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .header-logo {
-  height: 80px;
+  height: 50px;
   width: auto;
   object-fit: contain;
   position: absolute;
@@ -56,8 +56,8 @@
 
 .App-header h1 {
   margin: 0;
-  font-size: 3rem;
-  font-weight: 600;
+  font-size: 1.625rem;
+  font-weight: 500;
   letter-spacing: -0.025em;
   color: #374151;
   width: 100%;
@@ -65,13 +65,13 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
-/* Progress Bar Styling */
+/* Compact Progress Bar Styling */
 .progress-bar-container {
-  margin: 0 0 var(--spacing-lg) 0;
-  padding: var(--spacing-md) var(--spacing-md);
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  margin: 0 0 0.75rem 0;
+  padding: 0.5rem 1rem;
+  background: rgba(248, 249, 250, 0.8);
   border-bottom: 1px solid #e9ecef;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .progress-steps-horizontal {
@@ -91,17 +91,17 @@
 }
 
 .progress-step-circle-horizontal {
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-bottom: 6px;
-  transition: all 0.3s ease;
-  border: 2px solid #e0e0e0;
+  font-size: 0.65rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+  border: 1px solid #e0e0e0;
   background: white;
   color: #666;
 }
@@ -227,23 +227,18 @@ main {
   margin: 0 auto; /* Center the main content area */
 }
 
-/* Professional Page and Form Container Styles */
+/* Compact Page and Form Container Styles */
 .page-container,
 .form-container {
-  max-width: 500px;
-  margin: var(--spacing-sm) auto;
-  padding: var(--spacing-md);
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 12px;
-  box-shadow: 
-    0 8px 20px rgba(0, 0, 0, 0.08),
-    0 1px 3px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 450px;
+  margin: 0.5rem auto;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   text-align: left;
   position: relative;
-  overflow: hidden;
 }
 
 .page-container::before,
@@ -253,33 +248,29 @@ main {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 2px;
   background: linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-primary));
-  border-radius: 20px 20px 0 0;
+  border-radius: 8px 8px 0 0;
 }
 
 /* Specific container for card page to allow wider layout */
 .page-container.card-page-container {
-  max-width: 1400px;
-  padding: var(--spacing-md);
-  margin: var(--spacing-sm) auto;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(20px);
-  border-radius: 16px;
-  box-shadow: 
-    0 10px 25px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  max-width: 1200px;
+  padding: 0.75rem;
+  margin: 0.5rem auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Professional Typography */
+/* Compact Typography */
 .form-container h2, .page-container h2 {
   text-align: center;
   color: var(--text-heading);
-  margin-bottom: var(--spacing-lg);
-  font-weight: 600;
-  font-size: 1.75rem;
+  margin-bottom: 0.75rem;
+  font-weight: 400;
+  font-size: 1.25rem;
   letter-spacing: -0.025em;
   position: relative;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -288,59 +279,57 @@ main {
 .form-container h2::after, .page-container h2::after {
   content: '';
   position: absolute;
-  bottom: -12px;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
+  width: 40px;
+  height: 1px;
   background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
 .form-container h3, .page-container h3 {
   color: var(--text-heading);
-  margin-top: var(--spacing-xl);
-  margin-bottom: var(--spacing-lg);
-  font-weight: 600;
-  font-size: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  font-size: 1.1rem;
   letter-spacing: -0.015em;
-  /* border-bottom: 2px solid var(--border-color-light); */
-  padding-bottom: var(--spacing-md);
+  padding-bottom: 0.5rem;
 }
 
-/* Enhanced Form Groups */
+/* Compact Form Groups */
 .form-group {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 0.75rem;
   position: relative;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: var(--spacing-md);
-  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
   color: var(--text-primary);
-  font-size: 0.95rem;
-  letter-spacing: 0.025em;
+  font-size: 0.85rem;
+  letter-spacing: 0;
   text-transform: none;
 }
 
-/* Professional Input Styling */
+/* Compact Input Styling */
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group input[type="password"],
 .form-group select {
   width: 100%;
-  padding: var(--spacing-md);
-  border: 2px solid var(--border-color);
-  font-size: 0.95rem;
-  font-weight: 500;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  font-weight: 400;
   box-sizing: border-box;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: linear-gradient(135deg, var(--bg-input) 0%, rgba(248, 250, 252, 0.8) 100%);
+  transition: all 0.2s ease;
+  background: var(--bg-input);
   color: var(--text-primary);
-  box-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.05),
-    inset 0 1px 2px rgba(0, 0, 0, 0.02);
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .form-group input::placeholder,
@@ -381,80 +370,55 @@ main {
   transform: none;
 }
 
-/* Professional Button Styling */
+/* Compact Button Styling */
 button[type="submit"], .button-link {
   display: block;
   background: #4285F4;
   color: var(--color-white);
-  padding: 16px 24px;
+  padding: 0.6rem 1rem;
   border: none;
-  border-radius: 12px;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
-  line-height: 1.5;
+  box-shadow: 0 1px 3px rgba(66, 133, 244, 0.2);
+  line-height: 1.4;
   letter-spacing: 0;
-  position: relative;
-  overflow: hidden;
-  transform: translateY(0);
   margin: 0 auto;
   width: 100%;
-  min-width: 200px;
-}
-
-button[type="submit"]::before, .button-link::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-button[type="submit"]:hover::before, .button-link:hover::before {
-  left: 100%;
+  min-width: 120px;
 }
 
 button[type="submit"]:hover, .button-link:hover {
   background: #3367D6;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+  box-shadow: 0 2px 6px rgba(66, 133, 244, 0.3);
 }
 
 button[type="submit"]:active, .button-link:active {
-  transform: translateY(0);
-  box-shadow: 
-    0 2px 8px rgba(37, 99, 235, 0.3),
-    0 1px 3px rgba(0, 0, 0, 0.1);
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2);
 }
 
 button[type="submit"]:disabled {
-  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+  background: var(--color-secondary);
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-button[type="submit"]:disabled::before {
-  display: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Secondary button style */
 .button-link.secondary {
   background: #6C757D;
-  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+  box-shadow: 0 1px 3px rgba(108, 117, 125, 0.2);
 }
 
 .button-link.secondary:hover {
   background: #5A6268;
-  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+  box-shadow: 0 2px 6px rgba(108, 117, 125, 0.3);
 }
 
 /* Professional Message Styling */
@@ -766,11 +730,11 @@ button[type="submit"]:disabled::before {
 
 .input-with-icon input {
   width: 100%;
-  padding: 20px 24px;
-  padding-right: 60px;
+  padding: 12px 16px;
+  padding-right: 50px;
   border: 1px solid #D1D5DB;
-  border-radius: 12px;
-  font-size: 1.1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
   font-weight: 400;
   background: #FFFFFF;
   color: #374151;
@@ -788,7 +752,7 @@ button[type="submit"]:disabled::before {
 .input-with-icon input::placeholder {
   color: #9CA3AF;
   font-weight: 400;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
 }
 
 .card-icon {
@@ -948,7 +912,7 @@ button[type="submit"]:disabled::before {
 .card-form-panel,
 .card-selection-panel {
   flex: none;
-  padding: var(--spacing-md);
+  padding: 0.5rem;
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--border-radius-lg);
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);

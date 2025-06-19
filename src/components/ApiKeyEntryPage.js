@@ -309,7 +309,6 @@ const ApiKeyEntryPage = () => {
                 color: '#374151',
                 transition: 'all 0.3s ease',
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
                 boxSizing: 'border-box'
               }}
               onFocus={(e) => {
@@ -373,7 +372,6 @@ const ApiKeyEntryPage = () => {
                 margin: 0,
                 fontSize: '0.875rem',
                 color: '#065F46',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
                 fontWeight: '500',
                 wordBreak: 'break-all'
               }}>

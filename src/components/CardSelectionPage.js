@@ -726,9 +726,9 @@ const CardSelectionPage = () => {
                 <select id="cardSelector" value={selectedCardId} onChange={handleDropdownChange} style={{width: '100%', padding: '10px', fontSize: '1em'}} required>
                   <option value="" disabled>-- Select a Card --</option>
                   {cards.map(card => (
-                    <option key={card.id} value={card.id}>
-                      {card.name} ({card.issuerName}) - **** **** **** {card.number.slice(-4)}
-                    </option>
+                  <option key={card.id} value={card.id}>
+                    **** **** **** {card.number.slice(-4)} - {card.name} ({card.issuerName})
+                  </option>
                   ))}
                 </select>
               </div>
