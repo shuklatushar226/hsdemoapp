@@ -10,7 +10,7 @@ const ApiKeyEntryPage = () => {
   const [useDefaultKey, setUseDefaultKey] = useState(false);
   const navigate = useNavigate();
   
-  const defaultApiKey = 'snd_szudrVEofQbPL2qskIyrmNxrQhf2QAyOhKyzZ5PhtUEHowwzAoGW0pdCWGnC5A6l';
+  const defaultApiKey = 'snd_xumlWug1j8U4h7lNC2TC9KGsQbL9u4ljRSmzf86r65GmM8e1IpKGfDfuQyOVjJD5';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,7 +54,7 @@ const ApiKeyEntryPage = () => {
         // Fallback to general routing endpoint
         try {
           response = await axios.get(
-            'https://sandbox.hyperswitch.io/api/routing',
+            'https://sandbox.hyperswitch.io/routing',
             {
               headers: {
                 'api-key': keyToUse,
