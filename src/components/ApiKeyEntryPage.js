@@ -35,7 +35,7 @@ const ApiKeyEntryPage = () => {
       try {
         console.log('Trying specific endpoint: /routing/active with 3DS filter...');
         response = await axios.get(
-          'https://integ.hyperswitch.io/api/routing/active?transaction_type=three_ds_authentication&limit=100',
+          'https://sandbox.hyperswitch.io/routing/active?transaction_type=three_ds_authentication&limit=100',
           {
             headers: {
               'api-key': keyToUse,
@@ -54,7 +54,7 @@ const ApiKeyEntryPage = () => {
         // Fallback to general routing endpoint
         try {
           response = await axios.get(
-            'https://integ.hyperswitch.io/api/routing',
+            'https://sandbox.hyperswitch.io/api/routing',
             {
               headers: {
                 'api-key': keyToUse,

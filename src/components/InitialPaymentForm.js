@@ -25,7 +25,7 @@ const InitialPaymentForm = () => {
     try {
       // Fetch routing ID
       const routingResponse = await axios.get(
-        'https://integ.hyperswitch.io/api/routing/active?transaction_type=three_ds_authentication&limit=1',
+        'https://sandbox.hyperswitch.io/api/routing/active?transaction_type=three_ds_authentication&limit=1',
         {
           headers: {
             'api-key': apiKey,

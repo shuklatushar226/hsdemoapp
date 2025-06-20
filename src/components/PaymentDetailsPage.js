@@ -117,7 +117,7 @@ const PaymentDetailsPage = () => {
         setRoutingConfigData(null);
         try {
           const response = await axios.get(
-            `https://integ.hyperswitch.io/api/routing/${selectedRuleId}`,
+            `https://sandbox.hyperswitch.io/routing/${selectedRuleId}`,
             {
               headers: {
                 'api-key': apiKey,

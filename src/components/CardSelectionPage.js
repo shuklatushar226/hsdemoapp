@@ -588,7 +588,7 @@ const CardSelectionPage = () => {
     setApiRequestPayload(payload);
     console.log('Executing /routing/three_ds_decision/execute with payload:', JSON.stringify(payload, null, 2));
     try {
-      const response = await axios.post('https://integ.hyperswitch.io/api/three_ds_decision/execute', payload, {
+      const response = await axios.post('https://sandbox.hyperswitch.io/three_ds_decision/execute', payload, {
         headers: { 
           'Content-Type': 'application/json', 
           'Accept': 'application/json',
