@@ -253,32 +253,40 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
     };
 
     const renderValue = (key, value) => {
+      const isResponse = title === 'API Response';
+      
       if (typeof value === 'object' && value !== null) {
         if (key === 'payment' && value.amount && value.currency) {
-          return `${value.amount} ${value.currency}`;
+          const result = `${value.amount} ${value.currency}`;
+          return isResponse ? result.toUpperCase() : result;
         }
         if (key === 'payment_method' && value.card_network) {
-          return value.card_network;
+          return isResponse ? value.card_network.toUpperCase() : value.card_network;
         }
         if (key === 'issuer' && value.name) {
-          return `${value.name}${value.country ? ` (${value.country})` : ''}`;
+          const result = `${value.name}${value.country ? ` (${value.country})` : ''}`;
+          return isResponse ? result.toUpperCase() : result;
         }
         if (key === 'acquirer' && value.country) {
-          return value.country;
+          return isResponse ? value.country.toUpperCase() : value.country;
         }
         if (key === 'customer_device') {
-          return `${value.platform || 'Unknown'} - ${value.device_type || 'Unknown'}`;
+          const result = `${value.platform || 'Unknown'} - ${value.device_type || 'Unknown'}`;
+          return isResponse ? result.toUpperCase() : result;
         }
         if (key === 'three_ds') {
-          return value.authentication_status || 'N/A';
+          const result = value.authentication_status || 'N/A';
+          return isResponse ? result.toUpperCase() : result;
         }
-        return 'Complex Object';
+        return isResponse ? 'COMPLEX OBJECT' : 'Complex Object';
       }
       // Replace underscores with spaces for decision values
       if (key === 'decision') {
-        return String(value).replace(/_/g, ' ');
+        const result = String(value).replace(/_/g, ' ');
+        return isResponse ? result.toUpperCase() : result;
       }
-      return String(value);
+      const result = String(value);
+      return isResponse ? result.toUpperCase() : result;
     };
 
     const getDisplayKey = (key) => importantFields[key] || key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
