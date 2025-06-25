@@ -216,13 +216,13 @@ const PaymentDetailsPage = () => {
           <form onSubmit={handleSubmit} className="payment-form">
             <div className="form-group">
               <label htmlFor="amount">
-                Amount
+                Amount (in smallest currency unit)
               </label>
               <div className="input-wrapper">
                 <input
                   id="amount"
                   type="number"
-                  placeholder="e.g., 100"
+                  placeholder="e.g., 1050 (for $10.50 USD) or 100 (for ¥100 JPY)"
                   value={amount}
                   onChange={(e) => {
                     const val = e.target.value;
@@ -241,6 +241,9 @@ const PaymentDetailsPage = () => {
                   className="amount-input"
                 />
               </div>
+              <small style={{ color: '#6B7280', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>
+                Enter amount in cents for USD (100 = $1.00), yen for JPY (100 = ¥100), etc.
+              </small>
             </div>
             
             <div className="form-group">

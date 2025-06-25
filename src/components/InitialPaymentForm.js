@@ -56,7 +56,7 @@ const InitialPaymentForm = () => {
         state: {
           apiKey,
           routingId,
-          amount: parseFloat(amount), // Ensure amount is a number
+          amount: parseInt(amount, 10), // Ensure amount is an integer in smallest currency unit
           currency,
         },
       });
@@ -96,16 +96,20 @@ const InitialPaymentForm = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="amount">Amount:</label>
+          <label htmlFor="amount">Amount (in smallest currency unit):</label>
           <input
             id="amount"
             type="number"
-            placeholder="e.g., 10.50"
+            placeholder="e.g., 1050 (for $10.50 USD) or 100 (for ¥100 JPY)"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             required
-            step="0.01"
+            min="1"
+            step="1"
           />
+          <small style={{ color: '#6B7280', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>
+            Enter amount in cents for USD (100 = $1.00), yen for JPY (100 = ¥100), etc.
+          </small>
         </div>
         <div className="form-group">
           <label htmlFor="currency">Currency:</label>

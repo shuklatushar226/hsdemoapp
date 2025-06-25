@@ -19,6 +19,41 @@ const getDeviceType = () => {
   // GamingConsole is hard to detect reliably in a browser environment
 };
 
+// Helper function to format amount for display
+const formatAmountForDisplay = (amount, currency) => {
+  // Zero-decimal currencies (amounts are already in the correct unit)
+  const zeroDecimalCurrencies = ['JPY', 'KRW', 'VND', 'CLP', 'ISK', 'HUF', 'TWD', 'UGX'];
+  
+  if (zeroDecimalCurrencies.includes(currency?.toUpperCase())) {
+    return `${amount} ${currency}`;
+  }
+  
+  // For decimal currencies (USD, EUR, GBP, INR, AUD, CAD, ANG), divide by 100 to get the major unit
+  const majorAmount = (amount / 100).toFixed(2);
+  
+  // Add currency symbols for better display
+  switch (currency?.toUpperCase()) {
+    case 'USD':
+      return `$${majorAmount}`;
+    case 'EUR':
+      return `€${majorAmount}`;
+    case 'GBP':
+      return `£${majorAmount}`;
+    case 'INR':
+      return `₹${majorAmount}`;
+    case 'AUD':
+      return `A$${majorAmount}`;
+    case 'CAD':
+      return `C$${majorAmount}`;
+    case 'ANG':
+      return `ƒ${majorAmount}`;
+    case 'JPY':
+      return `¥${amount}`;
+    default:
+      return `${majorAmount} ${currency}`;
+  }
+};
+
 // Tooltip component for routing rule details
 const RoutingRuleTooltip = ({ routingId, rules, displayedRules, apiResponse, children }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -257,8 +292,9 @@ const FormattedApiResponse = ({ requestData, responseData, rules, displayedRules
       
       if (typeof value === 'object' && value !== null) {
         if (key === 'payment' && value.amount && value.currency) {
-          const result = `${value.amount} ${value.currency}`;
-          return isResponse ? result.toUpperCase() : result;
+          // Format the amount for display using the helper function
+          const formattedAmount = formatAmountForDisplay(value.amount, value.currency);
+          return isResponse ? formattedAmount.toUpperCase() : formattedAmount;
         }
         if (key === 'payment_method' && value.card_network) {
           return isResponse ? value.card_network.toUpperCase() : value.card_network;
@@ -754,7 +790,7 @@ const CardSelectionPage = () => {
           </div>
 
           <button type="submit" form="payment-form" disabled={loading || !selectedCardId} style={{ marginTop: '8px', width: '100%' }}>
-            {loading ? 'Processing...' : `Pay ${amount} ${currency}`}
+            {loading ? 'Processing...' : `Pay ${formatAmountForDisplay(amount, currency)}`}
           </button>
           {error && <p className="error-message" style={{ marginTop: '15px' }}>{error}</p>}
 
